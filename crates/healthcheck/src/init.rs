@@ -232,6 +232,7 @@ pub(super) async fn initializer() {
             "1.webp",
             "image/webp",
             "./crates/healthcheck/image/tsukuba.webp",
+            None,
         )
         .await
     {

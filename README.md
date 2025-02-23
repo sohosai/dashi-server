@@ -68,7 +68,7 @@ docker-compose -f dev.compose.yaml up -d
 ## server の起動
 
 ```sh
-cargo run --bin presentation
+sh start.sh
 ```
 
 ## 開発環境の削除

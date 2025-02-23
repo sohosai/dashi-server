@@ -1,6 +1,0 @@
-[package]
-name.workspace = true
-version.workspace = true
-edition.workspace = true
-
-[dependencies]

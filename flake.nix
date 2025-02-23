@@ -29,6 +29,7 @@
             buildInputs = [
               openssl
               pkg-config
+              cargo-watch
               (rust-bin.stable.latest.default.override { extensions = [ "rust-src" ]; })
               sea-orm-cli
             ];
@@ -37,4 +38,3 @@
       }
     );
 }
-

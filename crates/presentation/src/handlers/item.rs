@@ -26,7 +26,7 @@ use crate::models::rwlock_shared_state::RwLockSharedState;
     tag = "Item",
     params(("keywords", Query, description = "set search word")),
     responses(
-        (status = 200, description = "OK"),
+        (status = 200, description = "OK", body = SearchItemJson),
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),

@@ -2,9 +2,9 @@ use domain::{
     entity::data_type::transfer_item::TransferItemData,
     value_object::error::{critical_incident, item::transfer::TransferItemError},
 };
-use entity::item::{self, Entity as Item};
+use entity::item::Entity as Item;
 use neo4rs::{query, Graph, Node};
-use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
+use sea_orm::{DatabaseConnection, EntityTrait};
 use std::collections::HashSet;
 
 pub(super) async fn transfer(
@@ -78,9 +78,8 @@ pub(super) async fn transfer(
     let _ = item_node;
     let _ = item_node_ids;
 
-    //* validation of new_parent_visible_id is exist in Item Table *//
-    let new_parent_item_model = match Item::find()
-        .filter(item::Column::Color.eq(transfer_item_data.new_parent_visible_id.to_owned()))
+    //* validation of new_parent_id is exist in Item Table *//
+    let new_parent_item_model = match Item::find_by_id(transfer_item_data.new_parent_id as i32)
         .one(&rdb)
         .await
     {
@@ -99,7 +98,8 @@ pub(super) async fn transfer(
     // get item node
     let mut new_parent_item_node = graphdb
         .execute(
-            query("MATCH (item:Item {id: $id}) RETURN item").param("id", new_parent_item_model.id),
+            query("MATCH (item:Item {id: $id}) RETURN item")
+                .param("id", transfer_item_data.new_parent_id),
         )
         .await?;
     // parse node
@@ -177,7 +177,7 @@ pub(super) async fn transfer(
         };
         descendant_item_node_ids.insert(id);
     }
-    if descendant_item_node_ids.contains(&(new_parent_item_model.id as i64)) {
+    if descendant_item_node_ids.contains(&(transfer_item_data.new_parent_id as i64)) {
         // If new_parent_visible_id is descendant of visible_id
         return Err(TransferItemError::NewParentIdOneOfDescendantIdsError);
     }

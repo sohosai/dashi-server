@@ -2,7 +2,7 @@ use application::model::shared_state::SharedStateUseCase;
 use async_std::sync::{Arc, RwLock};
 use axum::{
     extract::DefaultBodyLimit,
-    http::{header, HeaderValue, Method},
+    http::{header, Method},
     routing::get,
     Router,
 };
@@ -90,13 +90,13 @@ pub async fn api() -> Result<(), ApiError> {
         crate::handlers::ping::ping_handler,
     ),
     components(schemas(
+        entity::label::Record,
         domain::entity::data_type::generate::GenerateData,
         domain::value_object::error::ResponseError,
         domain::entity::data_type::register_item::RegisterItemData,
         domain::entity::data_type::search_item::SearchItemData,
         application::usecase::item::search::SearchItemJson,
         application::usecase::item::update::UpdateItemDataJson,
-        entity::label::Record,
         application::usecase::item::individual::IndividualItemDataJson,
         application::usecase::csv::depreiation::DepreiationCsvJson,
         domain::entity::data_type::depreiation_csv::DepreiationCsvData,

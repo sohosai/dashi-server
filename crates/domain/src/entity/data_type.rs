@@ -8,6 +8,5 @@ pub mod register_item;
 pub mod rent_item;
 pub mod search_item;
 pub mod transfer_item;
-pub mod transfer_item_result;
 pub mod trash_item;
 pub mod update_item;

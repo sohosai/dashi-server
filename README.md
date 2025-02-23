@@ -67,6 +67,14 @@ docker-compose -f dev.compose.yaml up -d
 
 ## server の起動
 
+`cargo-watch`が導入させていない環境向け
+
+```sh
+cargo run --bin presentation
+```
+
+`cargo-watch`を導入済みの環境向け
+
 ```sh
 sh start.sh
 ```

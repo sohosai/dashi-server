@@ -89,42 +89,6 @@ pub async fn individual_item_handler(
     Ok((StatusCode::OK, Json(result)).into_response())
 }
 
-pub async fn connctor_handler(
-    Query(keywords): Query<HashMap<String, String>>,
-    Path(connector_name): Path<String>,
-    State(shared_state): State<RwLockSharedState>,
-) -> String {
-    tracing::info!("reached item/connector handler.");
-    tracing::info!("path (connector_name): {}", connector_name);
-    tracing::info!("query (keywords): {:?}", keywords.get("keywords"));
-    let keywords = match keywords.get("keywords") {
-        Some(keywords) => keywords,
-        None => "",
-    };
-    let shared_model = shared_state.read().await;
-    //operation
-    drop(shared_model);
-    "connctor_handler".to_string()
-}
-
-pub async fn cable_handler(
-    Query(keywords): Query<HashMap<String, String>>,
-    Path(cable_color_pattern): Path<String>,
-    State(shared_state): State<RwLockSharedState>,
-) -> String {
-    tracing::info!("reached item/cable handler.");
-    tracing::info!("path (cable_color_pattern): {}", cable_color_pattern);
-    tracing::info!("query (keywords): {:?}", keywords.get("keywords"));
-    let keywords = match keywords.get("keywords") {
-        Some(keywords) => keywords,
-        None => "",
-    };
-    let shared_model = shared_state.read().await;
-    //operation
-    drop(shared_model);
-    "cable_handler".to_string()
-}
-
 pub async fn archive_handler(
     Path(limit): Path<u32>,
     State(shared_state): State<RwLockSharedState>,

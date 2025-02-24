@@ -60,3 +60,4 @@ services:
     env_file:
       - .env
     tty: true
+    restart: always

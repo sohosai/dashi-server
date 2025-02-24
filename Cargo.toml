@@ -15,6 +15,7 @@ resolver = "2"
 members = [
     "crates/healthcheck",
     "crates/ping",
+    "crates/pre-ping",
     "crates/presentation",
     "crates/application",
     "crates/domain",

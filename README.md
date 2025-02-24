@@ -59,6 +59,15 @@ flowchart TD
 
 # 開発環境
 
+> [!WARNING]
+> 開発環境の構築は、Nix、flakes、direnv、nix-direnvの導入が済んでいることを前提としています。
+
+## `direnv allow`
+
+```sh
+direnv allow
+```
+
 ## 開発環境の構築
 
 ```sh
@@ -67,16 +76,8 @@ docker-compose -f dev.compose.yaml up -d
 
 ## server の起動
 
-`cargo-watch`が導入させていない環境向け
-
 ```sh
 cargo run --bin presentation
-```
-
-`cargo-watch`を導入済みの環境向け
-
-```sh
-sh start.sh
 ```
 
 ## 開発環境の削除

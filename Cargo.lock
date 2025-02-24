@@ -2979,6 +2979,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "pre-ping"
+version = "0.0.1"
+dependencies = [
+ "domain",
+ "infrastructure",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "presentation"
 version = "0.0.1"
 dependencies = [

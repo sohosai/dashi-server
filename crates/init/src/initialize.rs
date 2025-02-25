@@ -1,3 +1,4 @@
+use crate::error::init::InitError;
 use domain::{entity::data_type::meilisearch, repository::connection::ConnectionRepository};
 use entity::{
     item::{self, Entity as Item},
@@ -7,14 +8,13 @@ use infrastructure::connection;
 use neo4rs::{query, Node};
 use sea_orm::{self, EntityTrait, Set};
 
-pub(super) async fn initializer() {
+pub(super) async fn initializer() -> Result<(), InitError> {
     // Connect rdb
     let rdb = match connection::CollectConnection::connect_rdb().await {
         Ok(rdb) => rdb,
         Err(e) => {
             tracing::error!("Failed to connect to PostgreSQL.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::ConnectionError(e));
         }
     };
     // Connect graphdb
@@ -22,8 +22,7 @@ pub(super) async fn initializer() {
         Ok(graphdb) => graphdb,
         Err(e) => {
             tracing::error!("Failed to connect to Neo4j.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::ConnectionError(e));
         }
     };
     // Connect meilisearch
@@ -31,8 +30,7 @@ pub(super) async fn initializer() {
         Ok(meilisearch) => meilisearch,
         Err(e) => {
             tracing::error!("Failed to connect to Meilisearch.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::ConnectionError(e));
         }
     };
     // Connect r2
@@ -40,8 +38,7 @@ pub(super) async fn initializer() {
         Ok(r2) => r2,
         Err(e) => {
             tracing::error!("Failed to connect to R2.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::ConnectionError(e));
         }
     };
 
@@ -58,9 +55,9 @@ pub(super) async fn initializer() {
             tracing::info!("Inserted to Label Table: {:?}", label_model);
         }
         Err(e) => {
+            let a: sea_orm::DbErr = e;
             tracing::error!("Failed to insert label.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::DbErr(a));
         }
     }
     // Insert data into the Item table
@@ -84,8 +81,7 @@ pub(super) async fn initializer() {
         }
         Err(e) => {
             tracing::error!("Failed to insert item.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::DbErr(e));
         }
     };
 
@@ -118,8 +114,7 @@ pub(super) async fn initializer() {
         }
         Err(e) => {
             tracing::error!("Failed to insert meilisearch.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::MeiliSearchError(e));
         }
     }
     // set as filterable
@@ -150,8 +145,7 @@ pub(super) async fn initializer() {
         }
         Err(e) => {
             tracing::error!("Failed to set filterable attributes.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::MeiliSearchError(e));
         }
     }
     // get filterable attributes
@@ -162,8 +156,7 @@ pub(super) async fn initializer() {
         }
         Err(e) => {
             tracing::error!("Failed to get filterable attributes.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::MeiliSearchError(e));
         }
     }
 
@@ -176,8 +169,7 @@ pub(super) async fn initializer() {
         Ok(graphdb) => graphdb,
         Err(e) => {
             tracing::error!("Failed to create item node.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::GraphDBError(e));
         }
     };
     // get node
@@ -188,8 +180,7 @@ pub(super) async fn initializer() {
         Ok(graphdb) => graphdb,
         Err(e) => {
             tracing::error!("Failed to get item node.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(InitError::GraphDBError(e));
         }
     };
     // parse node
@@ -198,8 +189,7 @@ pub(super) async fn initializer() {
             Ok(item) => item,
             Err(e) => {
                 tracing::error!("Failed to get item.");
-                tracing::error!("{}", e.to_string());
-                return;
+                return Err(InitError::GraphDBError(e));
             }
         };
         let row = match item {
@@ -210,16 +200,14 @@ pub(super) async fn initializer() {
             Ok(node) => node,
             Err(e) => {
                 tracing::error!("Failed to get node.");
-                tracing::error!("{}", e.to_string());
-                return;
+                return Err(InitError::GraphDBDeError(e));
             }
         };
         let id: i64 = match node.get::<i64>("id") {
             Ok(id) => id,
             Err(e) => {
                 tracing::error!("Failed to get id.");
-                tracing::error!("{}", e.to_string());
-                return;
+                return Err(InitError::GraphDBDeError(e));
             }
         };
         tracing::info!("GraphDB result of item.");
@@ -231,7 +219,7 @@ pub(super) async fn initializer() {
         .upload_file(
             "1.webp",
             "image/webp",
-            "./crates/healthcheck/image/tsukuba.webp",
+            "./crates/init/image/tsukuba.webp",
             None,
         )
         .await
@@ -241,8 +229,7 @@ pub(super) async fn initializer() {
         }
         Err(e) => {
             tracing::error!("Failed to upload file.");
-            tracing::error!("{:?}", e);
-            return;
+            return Err(InitError::CfR2SdkOperationError(e));
         }
     };
 
@@ -251,4 +238,5 @@ pub(super) async fn initializer() {
 
     // Finish!
     tracing::info!("Initialize was finished!");
+    Ok(())
 }

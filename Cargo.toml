@@ -13,9 +13,8 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/healthcheck",
+    "crates/init",
     "crates/ping",
-    "crates/pre-ping",
     "crates/presentation",
     "crates/application",
     "crates/domain",
@@ -52,7 +51,7 @@ serde = { version="1.0.209", features=["derive"] }
 #neo4j
 neo4rs = "0.8.0"
 # cloudflare r2
-cf-r2-sdk = "3.0.0"
+cf-r2-sdk = "3.0.2"
 # error
 thiserror = "2.0.11"
 #other

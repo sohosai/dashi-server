@@ -7,25 +7,63 @@ use sea_orm::{DatabaseConnection, EntityTrait};
 
 pub(super) async fn healthcheck_rdb(rdb: DatabaseConnection) -> Result<(), HealthCheckError> {
     //* test *//
-    rdb.ping().await?;
+    // rdb.ping().await?;
+
+    //test
+    match rdb.ping().await {
+        Ok(_) => {
+            //test
+            tracing::info!("flag!!!!!!!!!!!!!!!!!!!!! --0--");
+        }
+        Err(e) => {
+            //test
+            tracing::info!("flag!!!!!!!!!!!!!!!!!!!!! --1--");
+
+            return Err(HealthCheckError::RDBError(e));
+        }
+    }
+
+    //test
+    tracing::info!("flag!!!!!!!!!!!!!!!!!!!!! --2--");
 
     //* check *//
     let root_label = match Label::find_by_id("0000".to_string()).one(&rdb).await {
         Ok(label_model) => match label_model {
             Some(label_model) => label_model,
-            None => return Err(HealthCheckError::RootItemNotFoundError),
+            None => {
+                //test
+                tracing::info!("flag!!!!!!!!!!!!!!!!!!!!! --3--");
+
+                return Err(HealthCheckError::RootItemNotFoundError);
+            }
         },
-        Err(e) => return Err(HealthCheckError::RDBError(e)),
+        Err(e) => {
+            //test
+            tracing::info!("flag!!!!!!!!!!!!!!!!!!!!! --4--");
+
+            return Err(HealthCheckError::RDBError(e));
+        }
     };
+
+    //test
+    tracing::info!("flag!!!!!!!!!!!!!!!!!!!!! --5--");
+
     let correct_root_label = label::Model {
         visible_id: "0000".to_string(),
         is_max: root_label.is_max,
         record: Record::Nothing,
     };
 
+    //test
+    tracing::info!("flag!!!!!!!!!!!!!!!!!!!!! --6--");
+
     if root_label != correct_root_label {
         return Err(HealthCheckError::IncompatibleInLabelTableError);
     }
+
+    //test
+    tracing::info!("flag!!!!!!!!!!!!!!!!!!!!! --6--");
+    tracing::info!("All flags were passed!!!!!!!!!!!!!!!!!!!!!");
 
     let root_item = match Item::find_by_id(1).one(&rdb).await {
         Ok(item_model) => match item_model {

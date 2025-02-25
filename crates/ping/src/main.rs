@@ -1,9 +1,12 @@
 use domain::repository::connection::ConnectionRepository;
+use error::ping::PingError;
 use infrastructure::connection;
 use neo4rs::query;
 
+mod error;
+
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), PingError> {
     // tracing
     let subscriber = tracing_subscriber::FmtSubscriber::builder()
         .with_max_level(tracing::Level::DEBUG)
@@ -14,8 +17,7 @@ async fn main() {
         Ok(rdb) => rdb,
         Err(e) => {
             tracing::error!("Failed to connect to PostgreSQL.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(PingError::ConnectionError(e));
         }
     };
     // Connect graphdb
@@ -23,8 +25,7 @@ async fn main() {
         Ok(graphdb) => graphdb,
         Err(e) => {
             tracing::error!("Failed to connect to Neo4j.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(PingError::ConnectionError(e));
         }
     };
     // Connect meilisearch
@@ -32,12 +33,11 @@ async fn main() {
         Ok(meilisearch) => meilisearch,
         Err(e) => {
             tracing::error!("Failed to connect to Meilisearch.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(PingError::ConnectionError(e));
         }
     };
     //* ping GraphDB *//
-    // get (item:Item {id: 1}) test
+    // get (item:Item {id: 1}) test (if connect to graphdb, it's healthy without {id: 1} node)
     match graphdb
         .execute(query("MATCH (item:Item {id: $id}) RETURN item").param("id", 1))
         .await
@@ -47,8 +47,7 @@ async fn main() {
         }
         Err(e) => {
             tracing::error!("Failed to ping GraphDB.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(PingError::GraphDBError(e));
         }
     };
     //* ping MeiliSearch *//
@@ -58,8 +57,7 @@ async fn main() {
         }
         Err(e) => {
             tracing::error!("Failed to ping MeiliSearch.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(PingError::MeiliSearchError(e));
         }
     };
     //* ping RDB *//
@@ -69,8 +67,8 @@ async fn main() {
         }
         Err(e) => {
             tracing::error!("Failed to ping RDB.");
-            tracing::error!("{}", e.to_string());
-            return;
+            return Err(PingError::DbErr(e));
         }
     };
+    Ok(())
 }

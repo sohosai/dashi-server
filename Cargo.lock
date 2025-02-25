@@ -128,12 +128,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anyhow"
-version = "1.0.95"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "34ac096ce696dc2fcabef30516bb13c0a68a11d30131d3df6f04711467681b04"
-
-[[package]]
 name = "application"
 version = "0.0.1"
 dependencies = [
@@ -900,12 +894,12 @@ dependencies = [
 
 [[package]]
 name = "cf-r2-sdk"
-version = "3.0.0"
+version = "3.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a2b862b8018234d6ec0fe28d9873934b89666a495301ed10b41e0542518c888"
+checksum = "cb64da06282369cf1546b595954744362f9fb20b7c1d3d837b9cdda92e926d16"
 dependencies = [
- "anyhow",
  "aws-sdk-s3",
+ "thiserror 2.0.11",
  "tokio",
 ]
 
@@ -1750,24 +1744,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "healthcheck"
-version = "0.0.1"
-dependencies = [
- "chrono",
- "domain",
- "dotenvy",
- "entity",
- "infrastructure",
- "neo4rs",
- "once_cell",
- "sea-orm 1.1.4",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "heck"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2200,6 +2176,27 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.96",
+]
+
+[[package]]
+name = "init"
+version = "0.0.1"
+dependencies = [
+ "cf-r2-sdk",
+ "chrono",
+ "domain",
+ "dotenvy",
+ "entity",
+ "infrastructure",
+ "meilisearch-sdk",
+ "neo4rs",
+ "once_cell",
+ "sea-orm 1.1.4",
+ "serde_json",
+ "thiserror 2.0.11",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -2894,7 +2891,10 @@ version = "0.0.1"
 dependencies = [
  "domain",
  "infrastructure",
+ "meilisearch-sdk",
  "neo4rs",
+ "sea-orm 1.1.4",
+ "thiserror 2.0.11",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -2976,17 +2976,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77957b295656769bb8ad2b6a6b09d897d94f05c41b069aede1fcdaa675eaea04"
 dependencies = [
  "zerocopy",
-]
-
-[[package]]
-name = "pre-ping"
-version = "0.0.1"
-dependencies = [
- "domain",
- "infrastructure",
- "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]

@@ -1,0 +1,22 @@
+[package]
+name = "ping"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+# DDD
+infrastructure = { path = "../infrastructure" }
+domain = { path = "../domain" }
+# async
+tokio.workspace = true
+# seaorm
+sea-orm.workspace = true
+# meilisearch
+meilisearch-sdk.workspace = true
+# neo4j
+neo4rs.workspace = true
+# logging
+tracing.workspace = true
+tracing-subscriber.workspace = true
+# error
+thiserror.workspace = true

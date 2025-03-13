@@ -1,0 +1,23 @@
+# Builder
+FROM rust:1.81.0 AS builder
+
+WORKDIR /app
+COPY . /app
+RUN cargo build --release --bin presentation
+
+
+# Release
+FROM debian:bookworm-slim AS release
+LABEL maintainer="sohosai"
+
+WORKDIR /app
+COPY --from=builder /app/target/release/presentation /app/target/release/presentation
+COPY server.sh /app/server.sh
+RUN touch /app/.env \
+    && chmod +x /app/.env \
+    && chmod +x /app/server.sh \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT ["/app/server.sh"]

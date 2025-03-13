@@ -1,0 +1,67 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    healthcheck:
+      test: pg_isready -U "${POSTGRES_USER}" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  neo4j:
+    container_name: neo4j
+    image: neo4j:5.23.0
+    ports:
+      - ${NEO4J_HTTP_PORT}:7474 # HTTP (http://localhost:${NEO4J_HTTP_PORT}/browser/)
+      - ${NEO4J_BOLT_PORT}:7687 # BOLT (clientのワチャワチャするポート)
+    volumes:
+      - ./neo4j/data:/data
+      - ./neo4j/logs:/logs
+    environment:
+      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider localhost:7474 || exit 1
+    tty: true
+  meilisearch:
+    container_name: meilisearch
+    image: "getmeili/meilisearch:prototype-japanese-184"
+    volumes:
+      - ./meilisearch:/meili_data
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+      - MEILI_ENV=${MEILI_ENV}
+    ports:
+      - "${MEILI_PORT}:7700"
+    healthcheck:
+      test: set -o pipefail;curl -fsS http://localhost:7700/health | grep -q '{"status":"available"}'
+      timeout: 5s
+      retries: 5
+    tty: true
+  server:
+    container_name: server
+    image: server
+    volumes:
+      - ./init:/app/init
+    depends_on:
+      postgres:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+      meilisearch:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: ./prod.Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    tty: true
+    restart: always

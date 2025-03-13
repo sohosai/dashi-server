@@ -1,0 +1,34 @@
+[package]
+name = "init"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+# DDD
+infrastructure = { path = "../infrastructure" }
+domain = { path = "../domain" }
+# seaorm
+tokio.workspace = true
+entity.workspace = true
+sea-orm.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+# meilisearch
+meilisearch-sdk.workspace = true
+# neo4j
+neo4rs.workspace = true
+# cloudflare r2
+cf-r2-sdk.workspace = true
+# logging
+tracing.workspace = true
+tracing-subscriber.workspace = true
+# .env
+dotenvy.workspace = true
+once_cell.workspace = true
+# error
+thiserror.workspace = true
+# utils
+serde.workspace = true
+serde_derive.workspace = true
+csv.workspace = true
+regex.workspace = true

@@ -1,0 +1,30 @@
+[package]
+name = "domain"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+# .env
+dotenvy.workspace = true
+# axum
+async-std.workspace = true
+axum.workspace = true
+utoipa.workspace = true
+# seaorm
+sea-orm.workspace = true
+entity.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+# meilisearch
+meilisearch-sdk.workspace = true
+# neo4j
+neo4rs.workspace = true
+#cloudflare r2
+cf-r2-sdk.workspace = true
+# error
+thiserror.workspace = true
+# logging
+tracing.workspace = true
+# image
+image.workspace = true

@@ -1,0 +1,30 @@
+[package]
+name = "infrastructure"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+# DDD
+domain = { path = "../domain" }
+# .env
+dotenvy.workspace = true
+once_cell.workspace = true
+# seaorm
+entity.workspace = true
+sea-orm.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+# meilisearch
+meilisearch-sdk.workspace = true
+# neo4j
+neo4rs.workspace = true
+#cloudflare r2
+cf-r2-sdk.workspace = true
+# logging
+tracing.workspace = true
+# other
+radix_fmt.workspace = true
+# image
+image.workspace = true
+webp.workspace = true

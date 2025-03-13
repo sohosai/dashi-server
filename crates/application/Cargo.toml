@@ -1,0 +1,16 @@
+[package]
+name = "application"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+#DDD
+domain = { path = "../domain" }
+# axum
+axum.workspace = true
+async-std.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+utoipa.workspace = true
+# seaorm
+entity.workspace = true

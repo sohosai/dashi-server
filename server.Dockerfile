@@ -12,7 +12,7 @@ LABEL maintainer="sohosai"
 
 WORKDIR /app
 COPY --from=builder /app/target/release/presentation /app/target/release/presentation
-COPY --from=builder /app/crates/server.sh /app/server.sh
+COPY --from=builder /app/server.sh /app/server.sh
 RUN touch /app/.env \
     && chmod +x /app/.env \
     && chmod +x /app/server.sh \

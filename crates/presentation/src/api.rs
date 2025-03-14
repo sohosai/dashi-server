@@ -140,6 +140,7 @@ pub async fn api() -> Result<(), ApiError> {
         application::usecase::item::update::UpdateItemDataJson,
         crate::models::register_item_multipart_data::RegisterItemMultipartData,
         crate::models::image_item_multipart::ImageItemMultipartData,
+        domain::entity::data_type::trash_item::TrashItemData,
     ))
 )]
 struct ApiDoc;

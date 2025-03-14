@@ -1418,7 +1418,7 @@ dependencies = [
  "image",
  "meilisearch-sdk",
  "neo4rs",
- "sea-orm 1.1.4",
+ "sea-orm 1.1.7",
  "serde",
  "serde_json",
  "thiserror 2.0.11",
@@ -1486,7 +1486,7 @@ dependencies = [
 name = "entity"
 version = "0.0.1"
 dependencies = [
- "sea-orm 1.1.4",
+ "sea-orm 1.1.7",
  "serde",
  "utoipa",
 ]
@@ -2383,7 +2383,7 @@ dependencies = [
  "neo4rs",
  "once_cell",
  "radix_fmt",
- "sea-orm 1.1.4",
+ "sea-orm 1.1.7",
  "serde",
  "serde_json",
  "tracing",
@@ -2416,7 +2416,7 @@ dependencies = [
  "neo4rs",
  "once_cell",
  "regex",
- "sea-orm 1.1.4",
+ "sea-orm 1.1.7",
  "serde",
  "serde_derive",
  "serde_json",
@@ -3195,6 +3195,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e"
 
 [[package]]
+name = "pgvector"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0e8871b6d7ca78348c6cd29b911b94851f3429f0cd403130ca17f26c1fb91a6"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "phf"
 version = "0.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3252,7 +3261,7 @@ dependencies = [
  "infrastructure",
  "meilisearch-sdk",
  "neo4rs",
- "sea-orm 1.1.4",
+ "sea-orm 1.1.7",
  "thiserror 2.0.11",
  "tokio",
  "tracing",
@@ -4141,19 +4150,20 @@ dependencies = [
 
 [[package]]
 name = "sea-orm"
-version = "1.1.4"
+version = "1.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a93194430b419da0801f404baf3b986399d6a2a4f43bc79bc96dea83f92ca43"
+checksum = "3417812d38049e8ec3d588c03570f8c60de811d2453fb48e424045a1600ffd86"
 dependencies = [
  "async-stream",
  "async-trait",
  "bigdecimal",
  "chrono",
- "futures",
+ "futures-util",
  "log",
  "ouroboros 0.18.5",
+ "pgvector",
  "rust_decimal",
- "sea-orm-macros 1.1.4",
+ "sea-orm-macros 1.1.7",
  "sea-query 0.32.1",
  "sea-query-binder 0.7.0",
  "serde",
@@ -4200,9 +4210,9 @@ dependencies = [
 
 [[package]]
 name = "sea-orm-macros"
-version = "1.1.4"
+version = "1.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d19e8f22fb474a8a622eb516c46885a080535d8d559386188f525977eaad32b3"
+checksum = "d705ba84e1c74c8ac27784e4ac6f21584058c1dc0cadb9d39b43e109fcf8139c"
 dependencies = [
  "heck 0.4.1",
  "proc-macro2",

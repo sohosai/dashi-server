@@ -58,7 +58,7 @@ services:
         condition: service_healthy
     build:
       context: .
-      dockerfile: ./dev.Dockerfile
+      dockerfile: ./db.Dockerfile
     env_file:
       - .env
     tty: true

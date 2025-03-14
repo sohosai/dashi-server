@@ -1,4 +1,3 @@
 #!/bin/bash
 
-/app/target/release/server
-
+/app/target/release/presentation

@@ -21,5 +21,4 @@ prod.compose.yaml
 prod.Dockerfile
 server.Dockerfile
 server.compose.yaml
-server.sh
 README.md

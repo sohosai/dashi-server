@@ -86,7 +86,41 @@ docker-compose -f db.compose.yaml down --rmi all --volumes
 sudo rm -rf postgres neo4j meilisearch init
 ```
 
-# 本番環境の構築
+## 各cointainerの登録情報の確認方法
+
+- meilisearch
+
+以下のURLにアクセス 
+
+※マスターキー(`MEILI_MASTER_KEY`)及びポート番号(`MEILI_PORT`)は`.env`参照
+
+```
+http://localhost:<MEILI_PORT>/
+```
+
+- neo4j
+
+以下のURLにアクセス
+
+※ユーザー名(`NEO4J_USER`)、パスワード(`NEO4J_PASSWORD`)及びポート番号(`NEO4J_HTTP_PORT`)は`.env`参照
+
+```
+http://localhost:<NEO4J_HTTP_PORT>/
+```
+
+- postgres
+
+shell上で以下コマンドを実行
+
+※ユーザー名(`POSTGRES_USER`)、パスワード(`POSTGRES_DB`)は、`.env`参照
+
+```sh
+ sudo docker exec -it postgres psql -U <POSTGRES_USER> -d <POSTGRES_DB>
+```
+
+# 本番環境
+
+## 本番環境の構築
 
 ### 0. .envの設置
 

@@ -45,7 +45,7 @@ entity = { path = "entity" }
 sea-orm = { version = "1.0.0", features = [ "sqlx-postgres", "runtime-tokio-native-tls", "macros" ] }
 chrono = "0.4.39"
 # meilisearch
-meilisearch-sdk = "0.27.1"
+meilisearch-sdk = "0.28.0"
 #neo4j
 neo4rs = "0.8.0"
 # cloudflare r2

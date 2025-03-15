@@ -59,21 +59,21 @@ flowchart TD
 
 ## 開発環境の構築
 
-### 0. .envの設置
+### 1. .envの設置
 
 シークレットな情報のため、詳細はscrapbox参照
 
-### 1. docker-compose up
+### 2. docker-compose up (dev)
 
 ```sh
-docker-compose -f db.compose.yaml up -d
+docker-compose -f dev.compose.yaml up -d
 ```
 
-### 2. .envの編集
+### 3. .envの編集
 
 シークレットな情報のため、詳細はscrapbox参照
 
-### 3. server の起動
+### 4. server の起動
 
 ```sh
 cargo run --bin presentation
@@ -82,7 +82,7 @@ cargo run --bin presentation
 ## 開発環境の削除
 
 ```sh
-docker-compose -f db.compose.yaml down --rmi all --volumes
+docker-compose -f dev.compose.yaml down --rmi all --volumes
 sudo rm -rf postgres neo4j meilisearch init
 ```
 
@@ -118,30 +118,6 @@ shell上で以下コマンドを実行
  sudo docker exec -it postgres psql -U <POSTGRES_USER> -d <POSTGRES_DB>
 ```
 
-# 本番環境
-
-## 本番環境の構築
-
-### 0. .envの設置
-
-シークレットな情報のため、詳細はscrapbox参照
-
-### 1. docker-compose up (db)
-
-```sh
-docker-compose -f db.compose.yaml up -d
-```
-
-### 2. .envの編集
-
-シークレットな情報のため、詳細はscrapbox参照
-
-### 3. docker-compose up (server)
-
-```sh
-docker-compose -f server.compose.yaml up -d
-```
-
 ## 開発環境の削除
 
 ```sh
@@ -152,7 +128,7 @@ sudo rm -rf postgres neo4j meilisearch init
 
 ## テーブルの更新
 
-### 1. docker-compose up
+### 1. docker-compose up (entity)
 
 ```sh
 docker-compose -f entity.compose.yaml up -d
@@ -173,9 +149,15 @@ sea-orm-cli generate entity \
     -o entity/src
 ```
 
-# 製品版の環境
+# 本番環境
 
-## 製品版の環境の構築
+## 本番環境の構築
+
+### 1. .envの設置
+
+シークレットな情報のため、詳細はscrapbox参照
+
+### 2. docker-compose up (prod)
 
 ```sh
 docker-compose -f prod.compose.yaml up -d

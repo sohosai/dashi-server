@@ -20,14 +20,14 @@ COPY --from=builder /app/target/release/init /app/target/release/init
 COPY --from=builder /app/crates/init/image/tsukuba.webp /app/crates/init/image/tsukuba.webp
 COPY --from=builder /app/crates/init/csv/color.csv /app/crates/init/csv/color.csv
 COPY --from=builder /app/crates/init/csv/connector.csv /app/crates/init/csv/connector.csv
-COPY db.sh /app/db.sh
+COPY dev.sh /app/dev.sh
 RUN touch /app/.env \
     && mkdir /app/init \
     && chmod +x /app/.env \
-    && chmod +x /app/db.sh \
+    && chmod +x /app/dev.sh \
     && chmod +x /app/init \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["/app/db.sh"]
+ENTRYPOINT ["/app/dev.sh"]

@@ -56,9 +56,6 @@ services:
         condition: service_healthy
       meilisearch:
         condition: service_healthy
-    # build:
-    #   context: .
-    #   dockerfile: ./prod.Dockerfile
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

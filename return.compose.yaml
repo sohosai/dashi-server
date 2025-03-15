@@ -46,7 +46,7 @@ services:
     tty: true
   server:
     container_name: server
-    image: server
+    image: ghcr.io/sohosai/dashi-server/server:main
     build:
       context: .
       dockerfile: ./return.Dockerfile

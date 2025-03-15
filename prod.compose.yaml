@@ -46,7 +46,7 @@ services:
     tty: true
   server:
     container_name: server
-    image: ghcr.io/sohosai/dashi-server/init:main
+    image: ghcr.io/sohosai/dashi-server/server:main
     volumes:
       - ./init:/app/init
     depends_on:

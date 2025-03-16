@@ -12,5 +12,5 @@ use domain::value_object::error::AppError;
 )]
 pub async fn ping_handler() -> Result<impl IntoResponse, AppError> {
     tracing::info!("reached ping handler.");
-    Ok((StatusCode::OK, "pong".to_string()).into_response())
+    Ok((StatusCode::OK, "Hello, World!".to_string()).into_response())
 }

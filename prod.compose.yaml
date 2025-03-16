@@ -3,7 +3,7 @@ services:
     container_name: postgres
     image: postgres:latest
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - dashi-postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -22,8 +22,8 @@ services:
       - ${NEO4J_HTTP_PORT}:7474 # HTTP (http://localhost:${NEO4J_HTTP_PORT}/browser/)
       - ${NEO4J_BOLT_PORT}:7687 # BOLT (clientのワチャワチャするポート)
     volumes:
-      - ./neo4j/data:/data
-      - ./neo4j/logs:/logs
+      - dashi-neo4j-data:/data
+      - dashi-neo4j-logs:/logs
     environment:
       - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
     healthcheck:
@@ -33,7 +33,7 @@ services:
     container_name: meilisearch
     image: "getmeili/meilisearch:prototype-japanese-184"
     volumes:
-      - ./meilisearch:/meili_data
+      - dashi-meilisearch:/meili_data
     environment:
       - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
       - MEILI_ENV=${MEILI_ENV}
@@ -48,7 +48,7 @@ services:
     container_name: server
     image: ghcr.io/sohosai/dashi-server/server:main
     volumes:
-      - ./init:/app/init
+      - dashi-init:/app/init
     depends_on:
       postgres:
         condition: service_healthy
@@ -80,3 +80,10 @@ services:
       - "5000:5000"
     tty: true
     restart: always
+
+volumes:
+  dashi-postgres:
+  dashi-neo4j-data:
+  dashi-neo4j-logs:
+  dashi-meilisearch:
+  dashi-init:

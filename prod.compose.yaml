@@ -83,7 +83,12 @@ services:
 
 volumes:
   dashi-postgres:
+    name: dashi-postgres
   dashi-neo4j-data:
+    name: dashi-neo4j-data
   dashi-neo4j-logs:
+    name: dashi-neo4j-logs
   dashi-meilisearch:
+    name: dashi-meilisearch
   dashi-init:
+    name: dashi-init

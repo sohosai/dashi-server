@@ -1,5 +1,6 @@
 use crate::models::rwlock_shared_state::RwLockSharedState;
 use application::usecase::rental::{
+    all_rental_items::{AllRentalItemsOutputs, RentalItemJson},
     rent::{RentRentalInputs, RentRentalOutputs},
     replace::{ReplaceRentalInputs, ReplaceRentalOutputs},
     update::{UpdateRentalInputs, UpdateRentalOutputs},
@@ -11,6 +12,34 @@ use axum::{
     Json,
 };
 use domain::{entity::data_type::rental::RentalData, value_object::error::AppError};
+
+#[utoipa::path(
+    get,
+    path = "/api/rental",
+    tag = "Rental",
+    responses(
+        (status = 200, description = "OK", body = RentalItemJson),
+        (status = 500, description = "Internal Server Error", body = ResponseError),
+    ),
+)]
+pub async fn all_rental_items_handler(
+    State(shared_state): State<RwLockSharedState>,
+) -> Result<impl IntoResponse, AppError> {
+    tracing::info!("reached rental/all_rental_items handler.");
+    let shared_model = shared_state.read().await;
+    // operation
+    let outputs = AllRentalItemsOutputs::new(
+        shared_model.clone().healthcheck,
+        shared_model.clone().all_rental_items,
+    )
+    .await;
+    let result = outputs.run().await?;
+    let result = RentalItemJson {
+        rental_items: result,
+    };
+    drop(shared_model);
+    Ok((StatusCode::OK, Json(result)).into_response())
+}
 
 #[utoipa::path(
     patch,

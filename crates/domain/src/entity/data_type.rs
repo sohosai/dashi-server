@@ -13,6 +13,7 @@ pub mod register_color;
 pub mod register_connector;
 pub mod register_item;
 pub mod rental;
+pub mod rental_item;
 pub mod search_item;
 pub mod status_connector;
 pub mod transfer_item;

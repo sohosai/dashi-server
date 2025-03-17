@@ -22,3 +22,5 @@ tracing.workspace = true
 tracing-subscriber.workspace = true
 # error
 thiserror.workspace = true
+# parse
+serde_json.workspace = true

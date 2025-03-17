@@ -14,7 +14,10 @@ use crate::{
         register::RegisterItem, search::SearchItem, transfer::TransferItem, trash::TrashItem,
         update::UpdateItem,
     },
-    rental::{rent::RentRental, replace::ReplaceRental, update::UpdateRental},
+    rental::{
+        all_rental_items::AllRentalItems, rent::RentRental, replace::ReplaceRental,
+        update::UpdateRental,
+    },
 };
 use domain::{
     factory::shared_state::SharedStateFactory,
@@ -37,14 +40,15 @@ use domain::{
             trash::TrashItemRepository, update::UpdateItemRepository,
         },
         rental::{
-            rent::RentRentalRepository, replace::ReplaceRentalRepository,
-            update::UpdateRentalRepository,
+            all_rental_items::AllRentalItemsRepository, rent::RentRentalRepository,
+            replace::ReplaceRentalRepository, update::UpdateRentalRepository,
         },
     },
 };
 
 #[derive(Clone)]
 pub struct SharedState {
+    pub all_rental_items: AllRentalItems,
     pub rent_rental: RentRental,
     pub update_rental: UpdateRental,
     pub replace_rental: ReplaceRental,
@@ -73,6 +77,7 @@ pub struct SharedState {
 impl SharedStateFactory for SharedState {
     async fn new() -> Self {
         SharedState {
+            all_rental_items: AllRentalItems::new().await,
             rent_rental: RentRental::new().await,
             update_rental: UpdateRental::new().await,
             replace_rental: ReplaceRental::new().await,

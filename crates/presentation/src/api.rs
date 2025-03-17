@@ -3,6 +3,7 @@ use async_std::sync::{Arc, RwLock};
 use axum::{
     extract::DefaultBodyLimit,
     http::{header, Method},
+    middleware,
     routing::get,
     Router,
 };
@@ -11,7 +12,9 @@ use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
 // レイヤードアーキテクチャに違反しているが、Rustの性質上不可能なのでinfrastructure層及びdomain層から直接呼び出す
-use crate::{error::api::ApiError, handlers::ping::ping_handler, routes};
+use crate::{
+    error::api::ApiError, handlers::ping::ping_handler, routes, utils::jwt::jwt_middleware,
+};
 use domain::factory::shared_state::SharedStateFactory;
 use infrastructure::shared_state::SharedState;
 
@@ -22,12 +25,14 @@ pub async fn api() -> Result<(), ApiError> {
         .with_max_level(tracing::Level::DEBUG)
         .finish();
     tracing::subscriber::set_global_default(subscriber)?;
+
     // Shared Object
     let shared_state = Arc::new(RwLock::new(
         SharedStateUseCase::new(SharedState::new().await)
             .await
             .shared_state_factory,
     ));
+
     // CORS
     let cors: CorsLayer = CorsLayer::new()
         .allow_headers([header::AUTHORIZATION, header::CONTENT_TYPE])
@@ -40,14 +45,20 @@ pub async fn api() -> Result<(), ApiError> {
             Method::DELETE,
         ])
         .allow_origin(Any);
+
     // Router
     let app: Router<()> = Router::new()
         .route("/", get(ping_handler))
         .merge(routes::root::root_route())
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
+        .layer(middleware::from_fn_with_state(
+            Arc::clone(&shared_state),
+            jwt_middleware,
+        ))
         .layer(cors)
         .layer(DefaultBodyLimit::max(1024 * 1024 * 100)) //100MB
         .with_state(Arc::clone(&shared_state));
+
     // Server
     let listener = tokio::net::TcpListener::bind("0.0.0.0:5000").await?;
     tracing::debug!("listening on http://{}", listener.local_addr()?);
@@ -84,6 +95,7 @@ pub async fn api() -> Result<(), ApiError> {
         (name = "Joke", description = "特殊なステータスコードを返すエンドポイント"),
     ),
     paths(
+        crate::handlers::rental::all_rental_items_handler,
         crate::handlers::rental::rent_handler,
         crate::handlers::rental::update_handler,
         crate::handlers::rental::replace_handler,
@@ -141,6 +153,8 @@ pub async fn api() -> Result<(), ApiError> {
         crate::models::register_item_multipart_data::RegisterItemMultipartData,
         crate::models::image_item_multipart::ImageItemMultipartData,
         domain::entity::data_type::trash_item::TrashItemData,
+        domain::entity::data_type::rental_item::RentalItemData,
+        application::usecase::rental::all_rental_items::RentalItemJson,
     ))
 )]
 struct ApiDoc;

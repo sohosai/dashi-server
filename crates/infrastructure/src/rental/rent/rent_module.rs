@@ -161,7 +161,7 @@ pub(super) async fn rent(
         description: "以下の物品が貸し出されました。".to_string(),
         color: 0x78e6d0,
         item: updated_item_model.clone(),
-        connect_discord_rental_webhook,
+        connect_discord_webhook: connect_discord_rental_webhook,
     };
 
     discord_rental_webhook_sender(sender).await?;

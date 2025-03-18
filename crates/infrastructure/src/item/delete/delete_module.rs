@@ -1,6 +1,10 @@
 use domain::{
-    entity::data_type::meilisearch_item::MeilisearchItemData,
-    value_object::error::{critical_incident, item::delete::DeleteItemError},
+    entity::{
+        data_type::meilisearch_item::MeilisearchItemData, discord::sender::DiscordWebHookSender,
+    },
+    value_object::error::{
+        critical_incident, discord::collection::DiscordCollection, item::delete::DeleteItemError,
+    },
 };
 use entity::{
     item::Entity as Item,
@@ -10,11 +14,14 @@ use meilisearch_sdk::client::Client;
 use neo4rs::{query, Graph, Node};
 use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, Set};
 
+use crate::discord::item::discord_item_webhook_sender;
+
 pub(super) async fn delete(
     rdb: DatabaseConnection,
     graphdb: Graph,
     meilisearch: Client,
     id: u32,
+    connect_discord_item_webhook: DiscordCollection,
 ) -> Result<(), DeleteItemError> {
     ////* validation *////
     //* validation of id is not 1 *//
@@ -187,7 +194,7 @@ pub(super) async fn delete(
         purchase_price: Set(item_model.purchase_price),
         durability: Set(item_model.durability),
         is_depreciation: Set(item_model.is_depreciation),
-        connector: Set(item_model.connector),
+        connector: Set(item_model.connector.to_owned()),
         is_rent: Set(item_model.is_rent),
         color: Set(item_model.color.to_owned()),
         created_at: Set(item_model.created_at),
@@ -204,6 +211,16 @@ pub(super) async fn delete(
             return Err(DeleteItemError::RDBError(e));
         }
     }
+
+    //* Discord Webhook *//
+    let sender = DiscordWebHookSender {
+        title: "物品の削除情報".to_string(),
+        description: "以下の物品が削除されました。".to_string(),
+        color: 0x78e6d0,
+        item: item_model.clone(),
+        connect_discord_webhook: connect_discord_item_webhook,
+    };
+    discord_item_webhook_sender(sender).await?;
 
     Ok(())
 }

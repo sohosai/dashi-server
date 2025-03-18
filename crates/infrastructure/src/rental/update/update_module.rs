@@ -158,7 +158,7 @@ pub(super) async fn update(
         description: "以下の物品の貸し出し内容が更新されました。".to_string(),
         color: 0x78e6d0,
         item: updated_item_model.clone(),
-        connect_discord_rental_webhook,
+        connect_discord_webhook: connect_discord_rental_webhook,
     };
     discord_rental_webhook_sender(sender).await?;
 

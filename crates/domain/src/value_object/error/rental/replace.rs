@@ -31,7 +31,7 @@ impl From<ReplaceRentalError> for AppError {
         match error {
             ReplaceRentalError::DiscordWebHookError(e) => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,
-                code: "rent-rental/discord-webhook".to_string(),
+                code: "replace-rental/discord-webhook".to_string(),
                 message: format!("{}", e),
             },
             ReplaceRentalError::IdConflictInItemTableError => AppError {

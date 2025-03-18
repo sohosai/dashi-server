@@ -1,6 +1,11 @@
 use domain::{
-    entity::data_type::{meilisearch_item::MeilisearchItemData, update_item::UpdateItemData},
-    value_object::error::{critical_incident, item::update::UpdateItemError},
+    entity::{
+        data_type::{meilisearch_item::MeilisearchItemData, update_item::UpdateItemData},
+        discord::sender::DiscordWebHookSender,
+    },
+    value_object::error::{
+        critical_incident, discord::collection::DiscordCollection, item::update::UpdateItemError,
+    },
 };
 use entity::{
     item::{self, Entity as Item},
@@ -9,10 +14,13 @@ use entity::{
 use meilisearch_sdk::client::Client;
 use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, Set};
 
+use crate::discord::item::discord_item_webhook_sender;
+
 pub(super) async fn update(
     rdb: DatabaseConnection,
     meilisearch: Client,
     update_item_data: UpdateItemData,
+    connect_discord_item_webhook: DiscordCollection,
 ) -> Result<(), UpdateItemError> {
     ////* validation *////
     //* validation of id is not 1 *//
@@ -109,21 +117,6 @@ pub(super) async fn update(
         }
     };
 
-    // //* upload image to R2 *//
-    // if (update_item_data.image).is_some() {
-    //     match object_strage::r2::upload(updated_item_model.id, &update_item_data.image).await {
-    //         Ok(_) => {
-    //             tracing::info!("Uploaded to Object Strage.");
-    //         }
-    //         Err(e) => {
-    //             tracing::error!("Failed to upload image to Object Strage.");
-    //             // try rollback
-    //             rollback_rdb(&rdb, updated_item_model).await?;
-    //             return Err(UpdateItemError::ObjectStrageError(e));
-    //         }
-    //     };
-    // }
-
     //* update MeiliSearch *//
     let meilisearch_model: MeilisearchItemData = MeilisearchItemData {
         id: updated_item_model.id,
@@ -163,6 +156,16 @@ pub(super) async fn update(
             return Err(UpdateItemError::MeiliSearchError(e));
         }
     }
+
+    //* Discord Webhook *//
+    let sender = DiscordWebHookSender {
+        title: "物品の更新情報".to_string(),
+        description: "以下の物品が更新されました。".to_string(),
+        color: 0x78e6d0,
+        item: updated_item_model.clone(),
+        connect_discord_webhook: connect_discord_item_webhook,
+    };
+    discord_item_webhook_sender(sender).await?;
 
     Ok(())
 }

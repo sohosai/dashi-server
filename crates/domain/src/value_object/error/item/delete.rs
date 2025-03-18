@@ -5,6 +5,8 @@ use crate::value_object::error::AppError;
 
 #[derive(Debug, Error)]
 pub enum DeleteItemError {
+    #[error(transparent)]
+    DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
     #[error("IdConflictInItemTableError: Conflict VisibleId in Item Table.")]
     IdConflictInItemTableError,
     #[error("IdNotFoundInItemTableError: VisibleId not found in Item Table.")]
@@ -38,6 +40,11 @@ pub enum DeleteItemError {
 impl From<DeleteItemError> for AppError {
     fn from(error: DeleteItemError) -> Self {
         match error {
+            DeleteItemError::DiscordWebHookError(e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "delete-item/discord-webhook".to_string(),
+                message: format!("{}", e),
+            },
             DeleteItemError::IdConflictInItemTableError => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,
                 code: "delete-item/visible-id-conflict-in-item-table".to_string(),

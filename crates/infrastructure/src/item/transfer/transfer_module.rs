@@ -1,13 +1,21 @@
+use crate::discord::item::discord_item_webhook_sender;
 use domain::{
-    entity::data_type::transfer_item::TransferItemData,
-    value_object::error::{critical_incident, item::transfer::TransferItemError},
+    entity::{data_type::transfer_item::TransferItemData, discord::sender::DiscordWebHookSender},
+    value_object::error::{
+        critical_incident, discord::collection::DiscordCollection,
+        item::transfer::TransferItemError,
+    },
 };
+use entity::item::Entity as Item;
 use neo4rs::{query, Graph, Node};
+use sea_orm::{DatabaseConnection, EntityTrait};
 use std::collections::HashSet;
 
 pub(super) async fn transfer(
+    rdb: DatabaseConnection,
     graphdb: Graph,
     transfer_item_data: TransferItemData,
+    connect_discord_item_webhook: DiscordCollection,
 ) -> Result<(), TransferItemError> {
     ////* validation *////
     //* validation of id is not root item *//
@@ -225,5 +233,20 @@ pub(super) async fn transfer(
                 return Err(TransferItemError::GraphDBError(e));
             }
     }
+
+    //* Discord Webhook *//
+    let item_model = match Item::find_by_id(transfer_item_data.id).one(&rdb).await? {
+        Some(label_model) => label_model,
+        None => return Err(TransferItemError::IdNotFoundInItemTableError),
+    };
+    let sender = DiscordWebHookSender {
+        title: "物品の移動情報".to_string(),
+        description: "以下の物品が移動されました。".to_string(),
+        color: 0x78e6d0,
+        item: item_model.clone(),
+        connect_discord_webhook: connect_discord_item_webhook,
+    };
+    discord_item_webhook_sender(sender).await?;
+
     Ok(())
 }

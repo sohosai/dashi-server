@@ -12,6 +12,8 @@ pub enum ImageItemError {
     #[error("ParameterNotFoundError: Parameter not found.")]
     ParameterNotFoundError,
     //infrastracture
+    #[error(transparent)]
+    DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
     #[error("IdConflictInItemTableError: Conflict VisibleId in Item Table.")]
     IdConflictInItemTableError,
     #[error("IdNotFoundInItemTableError: VisibleId not found in Item Table.")]
@@ -45,6 +47,11 @@ impl From<ImageItemError> for AppError {
                 status_code: StatusCode::BAD_REQUEST,
                 code: "image-item/parameter-not-found".to_string(),
                 message: "ParameterNotFoundError: Parameter not found.".to_string(),
+            },
+            ImageItemError::DiscordWebHookError(e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "image-item/discord-webhook".to_string(),
+                message: format!("{}", e),
             },
             ImageItemError::IdConflictInItemTableError => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,

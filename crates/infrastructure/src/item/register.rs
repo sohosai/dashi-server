@@ -1,4 +1,4 @@
-use crate::connection;
+use crate::connection::{self, discord::connect_discord_item_webhook};
 use crate::item::register::register_module::register;
 use domain::{
     repository::{
@@ -20,11 +20,13 @@ impl RegisterItemRepository for RegisterItem {
     }
     async fn register(&self, register_item_data: RegisterItemInterface) -> Result<(), AppError> {
         let connect_collection = connection::CollectConnection::new().await?;
+        let connect_discord_item_webhook = connect_discord_item_webhook().await?;
         register(
             connect_collection.rdb,
             connect_collection.graphdb,
             connect_collection.meilisearch,
             register_item_data.register_item_data,
+            connect_discord_item_webhook,
         )
         .await?;
         Ok(())

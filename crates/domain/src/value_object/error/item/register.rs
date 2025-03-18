@@ -17,6 +17,8 @@ pub enum RegisterItemError {
     ParameterNotFoundError,
     //infrastracture
     #[error(transparent)]
+    DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
+    #[error(transparent)]
     ObjectStrageError(#[from] crate::value_object::error::object_strage::r2::R2Error),
     #[error("ItemNameEmptyError: Item name is empty.")]
     ItemNameEmptyError,
@@ -87,6 +89,11 @@ impl From<RegisterItemError> for AppError {
                 status_code: StatusCode::BAD_REQUEST,
                 code: "register-item/parameter-not-found".to_string(),
                 message: "ParameterNotFoundError: Parameter not found.".to_string(),
+            },
+            RegisterItemError::DiscordWebHookError(e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "register-item/discord-webhook".to_string(),
+                message: format!("{}", e),
             },
             RegisterItemError::ObjectStrageError(e) => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,

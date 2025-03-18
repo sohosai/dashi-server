@@ -5,6 +5,8 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 pub enum UpdateItemError {
     #[error(transparent)]
+    DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
+    #[error(transparent)]
     ObjectStrageError(#[from] crate::value_object::error::object_strage::r2::R2Error),
     #[error("CannotupdateRootItemError: Can not update root item.")]
     CannotupdateRootItemError,
@@ -37,6 +39,11 @@ pub enum UpdateItemError {
 impl From<UpdateItemError> for AppError {
     fn from(error: UpdateItemError) -> Self {
         match error {
+            UpdateItemError::DiscordWebHookError(e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "update-item/discord-webhook".to_string(),
+                message: format!("{}", e),
+            },
             UpdateItemError::ObjectStrageError(e) => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,
                 code: "update-item/object-strage".to_string(),

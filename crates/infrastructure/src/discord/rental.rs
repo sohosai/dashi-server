@@ -14,15 +14,12 @@ pub async fn discord_rental_webhook_sender(
             color: sender.color,
             url: format!(
                 "{}/item/{}",
-                sender.connect_discord_rental_webhook.dasih_client_endpoint, sender.item.id
+                sender.connect_discord_webhook.dasih_client_endpoint, sender.item.id
             ),
             image: discord::json::Image {
                 url: format!(
                     "{}/{}.webp",
-                    sender
-                        .connect_discord_rental_webhook
-                        .cloudflare_r2_image_uri,
-                    sender.item.id
+                    sender.connect_discord_webhook.cloudflare_r2_image_uri, sender.item.id
                 ),
             },
             fields: vec![
@@ -79,7 +76,7 @@ pub async fn discord_rental_webhook_sender(
         }],
     };
     let response = sender
-        .connect_discord_rental_webhook
+        .connect_discord_webhook
         .request_builder
         .header("Content-Type", "application/json")
         .body(serde_json::to_string(&request)?)

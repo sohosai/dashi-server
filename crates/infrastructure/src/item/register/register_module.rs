@@ -1,6 +1,12 @@
 use domain::{
-    entity::data_type::{meilisearch_item::MeilisearchItemData, register_item::RegisterItemData},
-    value_object::error::{critical_incident, item::register::RegisterItemError},
+    entity::{
+        data_type::{meilisearch_item::MeilisearchItemData, register_item::RegisterItemData},
+        discord::sender::DiscordWebHookSender,
+    },
+    value_object::error::{
+        critical_incident, discord::collection::DiscordCollection,
+        item::register::RegisterItemError,
+    },
 };
 use entity::{
     item::{self, Entity as Item},
@@ -13,13 +19,14 @@ use sea_orm::{
     Set,
 };
 
-use crate::object_strage;
+use crate::{discord::item::discord_item_webhook_sender, object_strage};
 
 pub(super) async fn register(
     rdb: DatabaseConnection,
     graphdb: Graph,
     meilisearch: Client,
     register_item_data: RegisterItemData,
+    connect_discord_item_webhook: DiscordCollection,
 ) -> Result<(), RegisterItemError> {
     ////* validation *////
     //* validation of name is not empty *//
@@ -342,6 +349,16 @@ pub(super) async fn register(
             return Err(RegisterItemError::GraphDBError(e));
         }
     }
+
+    //* Discord Webhook *//
+    let sender = DiscordWebHookSender {
+        title: "物品の登録情報".to_string(),
+        description: "以下の物品が登録されました。".to_string(),
+        color: 0x78e6d0,
+        item: registered_item_model.clone(),
+        connect_discord_webhook: connect_discord_item_webhook,
+    };
+    discord_item_webhook_sender(sender).await?;
 
     Ok(())
 }

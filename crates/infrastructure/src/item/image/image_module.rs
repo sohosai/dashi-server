@@ -1,22 +1,28 @@
 use domain::{
-    entity::data_type::{image_item::ImageItemData, meilisearch_item::MeilisearchItemData},
-    value_object::error::{critical_incident, item::image::ImageItemError},
+    entity::{
+        data_type::{image_item::ImageItemData, meilisearch_item::MeilisearchItemData},
+        discord::sender::DiscordWebHookSender,
+    },
+    value_object::error::{
+        critical_incident, discord::collection::DiscordCollection, item::image::ImageItemError,
+    },
 };
 use entity::item::Entity as Item;
 use meilisearch_sdk::client::Client;
 use sea_orm::{DatabaseConnection, EntityTrait};
 
-use crate::object_strage;
+use crate::{discord::item::discord_item_webhook_sender, object_strage};
 
 pub(super) async fn image(
     rdb: DatabaseConnection,
     meilisearch: Client,
     image_item_data: ImageItemData,
+    connect_discord_item_webhook: DiscordCollection,
 ) -> Result<(), ImageItemError> {
     ////* validation *////
     //* validation of id is exist *//
     // validation of id is exist in Item Table
-    match Item::find_by_id(image_item_data.id).all(&rdb).await {
+    let item_model = match Item::find_by_id(image_item_data.id).all(&rdb).await {
         Ok(item_models) => {
             if item_models.len() > 1 {
                 // If multiple ids already exist
@@ -70,5 +76,16 @@ pub(super) async fn image(
             return Err(ImageItemError::ObjectStrageError(e));
         }
     };
+
+    //* Discord Webhook *//
+    let sender = DiscordWebHookSender {
+        title: "物品の削除情報".to_string(),
+        description: "以下の物品が削除されました。".to_string(),
+        color: 0x78e6d0,
+        item: item_model.clone(),
+        connect_discord_webhook: connect_discord_item_webhook,
+    };
+    discord_item_webhook_sender(sender).await?;
+
     Ok(())
 }

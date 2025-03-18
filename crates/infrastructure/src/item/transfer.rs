@@ -1,4 +1,4 @@
-use crate::connection;
+use crate::connection::{self, discord::connect_discord_item_webhook};
 use domain::{
     repository::{
         connection::ConnectionRepository,
@@ -18,8 +18,16 @@ impl TransferItemRepository for TransferItem {
         Self {}
     }
     async fn transfer(&self, transfer_item_data: TransferItemInterface) -> Result<(), AppError> {
-        let graphdb = connection::CollectConnection::connect_graphdb().await?;
-        transfer(graphdb, transfer_item_data.transfer_item_data).await?;
+        let connect_rdb = connection::CollectConnection::connect_rdb().await?;
+        let connect_graphdb = connection::CollectConnection::connect_graphdb().await?;
+        let connect_discord_item_webhook = connect_discord_item_webhook().await?;
+        transfer(
+            connect_rdb,
+            connect_graphdb,
+            transfer_item_data.transfer_item_data,
+            connect_discord_item_webhook,
+        )
+        .await?;
         Ok(())
     }
 }

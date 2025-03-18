@@ -5,5 +5,5 @@ pub struct DiscordWebHookSender {
     pub description: String,
     pub color: i32,
     pub item: entity::item::Model,
-    pub connect_discord_rental_webhook: DiscordCollection,
+    pub connect_discord_webhook: DiscordCollection,
 }

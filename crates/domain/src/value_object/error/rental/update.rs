@@ -33,7 +33,7 @@ impl From<UpdateRentalError> for AppError {
         match error {
             UpdateRentalError::DiscordWebHookError(e) => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,
-                code: "rent-rental/discord-webhook".to_string(),
+                code: "update-rental/discord-webhook".to_string(),
                 message: format!("{}", e),
             },
             UpdateRentalError::RecipientEmptyError => AppError {

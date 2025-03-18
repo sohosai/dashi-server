@@ -161,7 +161,7 @@ pub(super) async fn update(
     let sender = DiscordWebHookSender {
         title: "物品の更新情報".to_string(),
         description: "以下の物品が更新されました。".to_string(),
-        color: 0x78e6d0,
+        color: 0x49cb90,
         item: updated_item_model.clone(),
         connect_discord_webhook: connect_discord_item_webhook,
     };

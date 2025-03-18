@@ -354,7 +354,7 @@ pub(super) async fn register(
     let sender = DiscordWebHookSender {
         title: "物品の登録情報".to_string(),
         description: "以下の物品が登録されました。".to_string(),
-        color: 0x78e6d0,
+        color: 0x49cb90,
         item: registered_item_model.clone(),
         connect_discord_webhook: connect_discord_item_webhook,
     };

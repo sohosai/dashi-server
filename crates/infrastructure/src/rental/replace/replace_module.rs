@@ -146,7 +146,7 @@ pub(super) async fn replace(
     let sender = DiscordWebHookSender {
         title: "返却情報".to_string(),
         description: "以下の物品が返却されました。".to_string(),
-        color: 0x78e6d0,
+        color: 0x50e3c1,
         item: updated_item_model.clone(),
         connect_discord_webhook: connect_discord_rental_webhook,
     };

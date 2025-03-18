@@ -242,7 +242,7 @@ pub(super) async fn transfer(
     let sender = DiscordWebHookSender {
         title: "物品の移動情報".to_string(),
         description: "以下の物品が移動されました。".to_string(),
-        color: 0x78e6d0,
+        color: 0x49cb90,
         item: item_model.clone(),
         connect_discord_webhook: connect_discord_item_webhook,
     };

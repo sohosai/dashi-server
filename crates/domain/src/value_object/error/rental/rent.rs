@@ -4,6 +4,8 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum RentRentalError {
+    #[error(transparent)]
+    DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
     #[error("RecipientEmptyError: Recipient is empty.")]
     RecipientEmptyError,
     #[error("IdConflictInItemTableError: Conflict VisibleId in Item Table.")]
@@ -21,6 +23,10 @@ pub enum RentRentalError {
     #[error("DateTimeParseError: Parse DateTime is failed.")]
     ParseDateTimeError(String),
     #[error(transparent)]
+    SerdeJsonError(#[from] serde_json::Error),
+    #[error(transparent)]
+    ReqwestError(#[from] reqwest::Error),
+    #[error(transparent)]
     MeiliSearchError(#[from] meilisearch_sdk::errors::Error),
     #[error(transparent)]
     RDBError(#[from] sea_orm::DbErr),
@@ -29,6 +35,11 @@ pub enum RentRentalError {
 impl From<RentRentalError> for AppError {
     fn from(error: RentRentalError) -> Self {
         match error {
+            RentRentalError::DiscordWebHookError(e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "rent-rental/discord-webhook".to_string(),
+                message: format!("{}", e),
+            },
             RentRentalError::RecipientEmptyError => AppError {
                 status_code: StatusCode::BAD_REQUEST,
                 code: "rent-rental/recipient-empty".to_string(),
@@ -73,6 +84,17 @@ impl From<RentRentalError> for AppError {
                 status_code: StatusCode::BAD_REQUEST,
                 code: "rent-rental/parse-datetime".to_string(),
                 message: "ParseDateTimeError: Parse DateTime is failed.".to_string(),
+            },
+            RentRentalError::SerdeJsonError(_e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "rent-rental/serde-json".to_string(),
+                message: "SerdeJsonError: Parse discord webhook json trouble is occurred."
+                    .to_string(),
+            },
+            RentRentalError::ReqwestError(_e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "rent-rental/reqwest".to_string(),
+                message: "ReqwestError: Send discord webhook trouble is occurred.".to_string(),
             },
             RentRentalError::MeiliSearchError(_e) => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,

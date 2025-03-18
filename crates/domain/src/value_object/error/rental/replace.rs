@@ -4,6 +4,8 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum ReplaceRentalError {
+    #[error(transparent)]
+    DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
     #[error("IdConflictInItemTableError: Conflict VisibleId in Item Table.")]
     IdConflictInItemTableError,
     #[error("IdNotFoundInItemTableError: VisibleId not found in Item Table.")]
@@ -27,6 +29,11 @@ pub enum ReplaceRentalError {
 impl From<ReplaceRentalError> for AppError {
     fn from(error: ReplaceRentalError) -> Self {
         match error {
+            ReplaceRentalError::DiscordWebHookError(e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "rent-rental/discord-webhook".to_string(),
+                message: format!("{}", e),
+            },
             ReplaceRentalError::IdConflictInItemTableError => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,
                 code: "replace-rental/id-conflict-in-item-table".to_string(),

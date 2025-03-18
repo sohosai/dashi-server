@@ -4,6 +4,8 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum UpdateRentalError {
+    #[error(transparent)]
+    DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
     #[error("RecipientEmptyError: Recipient is empty.")]
     RecipientEmptyError,
     #[error("IdConflictInItemTableError: Conflict VisibleId in Item Table.")]
@@ -29,6 +31,11 @@ pub enum UpdateRentalError {
 impl From<UpdateRentalError> for AppError {
     fn from(error: UpdateRentalError) -> Self {
         match error {
+            UpdateRentalError::DiscordWebHookError(e) => AppError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                code: "rent-rental/discord-webhook".to_string(),
+                message: format!("{}", e),
+            },
             UpdateRentalError::RecipientEmptyError => AppError {
                 status_code: StatusCode::BAD_REQUEST,
                 code: "update-rental/recipient-empty".to_string(),

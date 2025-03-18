@@ -1,15 +1,23 @@
 use domain::{
-    entity::data_type::meilisearch_item::MeilisearchItemData,
-    value_object::error::{critical_incident, rental::replace::ReplaceRentalError},
+    entity::{
+        data_type::meilisearch_item::MeilisearchItemData, discord::sender::DiscordWebHookSender,
+    },
+    value_object::error::{
+        critical_incident, discord::collection::DiscordCollection,
+        rental::replace::ReplaceRentalError,
+    },
 };
 use entity::item::Entity as Item;
 use meilisearch_sdk::client::Client;
 use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, Set};
 
+use crate::discord::rental::discord_rental_webhook_sender;
+
 pub(super) async fn replace(
     rdb: DatabaseConnection,
     meilisearch: Client,
     id: u32,
+    connect_discord_rental_webhook: DiscordCollection,
 ) -> Result<(), ReplaceRentalError> {
     ////* validation *////
     //* validation of id is exist *//
@@ -133,6 +141,16 @@ pub(super) async fn replace(
             return Err(ReplaceRentalError::RDBError(e));
         }
     };
+
+    //* Discord Webhook *//
+    let sender = DiscordWebHookSender {
+        title: "返却情報".to_string(),
+        description: "以下の物品が返却されました。".to_string(),
+        color: 0x78e6d0,
+        item: updated_item_model.clone(),
+        connect_discord_rental_webhook,
+    };
+    discord_rental_webhook_sender(sender).await?;
 
     drop(meilisearch);
     drop(meilisearch_item);

@@ -1,4 +1,4 @@
-use crate::connection;
+use crate::connection::{self, discord::connect_discord_rental_webhook};
 use domain::{
     repository::{
         connection::ConnectionRepository,
@@ -23,10 +23,12 @@ impl ReplaceRentalRepository for ReplaceRental {
     ) -> Result<(), AppError> {
         let connect_rdb = connection::CollectConnection::connect_rdb().await?;
         let connect_meilisearch = connection::CollectConnection::connect_meilisearch().await?;
+        let connect_discord_rental_webhook = connect_discord_rental_webhook().await?;
         replace(
             connect_rdb,
             connect_meilisearch,
             replace_rental_interface.id,
+            connect_discord_rental_webhook,
         )
         .await?;
         Ok(())

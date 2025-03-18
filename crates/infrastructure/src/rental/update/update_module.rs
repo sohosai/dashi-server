@@ -1,16 +1,25 @@
 use chrono::DateTime;
 use domain::{
-    entity::data_type::{meilisearch_item::MeilisearchItemData, rental::RentalData},
-    value_object::error::{critical_incident, rental::update::UpdateRentalError},
+    entity::{
+        data_type::{meilisearch_item::MeilisearchItemData, rental::RentalData},
+        discord::sender::DiscordWebHookSender,
+    },
+    value_object::error::{
+        critical_incident, discord::collection::DiscordCollection,
+        rental::update::UpdateRentalError,
+    },
 };
 use entity::item::Entity as Item;
 use meilisearch_sdk::client::Client;
 use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, Set};
 
+use crate::discord::rental::discord_rental_webhook_sender;
+
 pub(super) async fn update(
     rdb: DatabaseConnection,
     meilisearch: Client,
     rental_data: RentalData,
+    connect_discord_rental_webhook: DiscordCollection,
 ) -> Result<(), UpdateRentalError> {
     ////* validation *////
     //* validation of recipient is not empty *//
@@ -142,6 +151,16 @@ pub(super) async fn update(
             return Err(UpdateRentalError::RDBError(e));
         }
     };
+
+    //* Discord Webhook *//
+    let sender = DiscordWebHookSender {
+        title: "貸し出し内容の更新情報".to_string(),
+        description: "以下の物品の貸し出し内容が更新されました。".to_string(),
+        color: 0x78e6d0,
+        item: updated_item_model.clone(),
+        connect_discord_rental_webhook,
+    };
+    discord_rental_webhook_sender(sender).await?;
 
     drop(meilisearch);
     drop(meilisearch_item);

@@ -23,6 +23,8 @@ neo4rs.workspace = true
 cf-r2-sdk.workspace = true
 # auth0
 jwtk.workspace = true
+# discord webhook
+reqwest.workspace = true
 # logging
 tracing.workspace = true
 # other

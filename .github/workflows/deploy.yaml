@@ -10,7 +10,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: server
-  VERSION: 0.0.1
 
 jobs:
   deploy-container:
@@ -32,4 +31,4 @@ jobs:
         with:
           push: true
           file: prod.Dockerfile
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}

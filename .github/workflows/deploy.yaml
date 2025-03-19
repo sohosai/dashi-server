@@ -12,7 +12,35 @@ env:
   IMAGE_NAME: server
 
 jobs:
-  container:
+  get-old-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get Old Tag
+        id: old_tag
+        run: echo '::set-output name=old_tag_name::$(git describe --tags --abbrev=0)'
+  create-new-tag:
+    needs: get-old-tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create Tag
+        run: |
+          echo "v1-$(TZ=Asia/Tokyo date +%Y%m%d-%H%M%S)" > TAG_NAME
+          git tag $(cat TAG_NAME)
+          git push origin $(cat TAG_NAME)
+  create-new-container:
+    needs: 
+      - create-new-tag
+      - get-old-tag
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -32,3 +60,23 @@ jobs:
           push: true
           file: prod.Dockerfile
           tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+  delete-old-container:
+    needs: create-new-container
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Delete Old Container
+        run: |
+          docker pull ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ needs.get-old-tag.outputs.old_tag }}
+          docker rmi ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ needs.get-old-tag.outputs.old_tag }}
+          docker image prune -f

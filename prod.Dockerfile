@@ -33,3 +33,5 @@ RUN touch /app/.env \
     && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/app/prod.sh"]
+
+EXPOSE 5000

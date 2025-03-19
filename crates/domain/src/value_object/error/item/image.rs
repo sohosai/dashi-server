@@ -12,6 +12,8 @@ pub enum ImageItemError {
     #[error("ParameterNotFoundError: Parameter not found.")]
     ParameterNotFoundError,
     //infrastracture
+    #[error("IsRentIsTrueError: is_rent field is true.")]
+    IsRentIsTrueError,
     #[error(transparent)]
     DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
     #[error("IdConflictInItemTableError: Conflict VisibleId in Item Table.")]
@@ -47,6 +49,11 @@ impl From<ImageItemError> for AppError {
                 status_code: StatusCode::BAD_REQUEST,
                 code: "image-item/parameter-not-found".to_string(),
                 message: "ParameterNotFoundError: Parameter not found.".to_string(),
+            },
+            ImageItemError::IsRentIsTrueError => AppError {
+                status_code: StatusCode::BAD_REQUEST,
+                code: "image-item/is-rent-is-true".to_string(),
+                message: "IsRentIsTrueError: is_rent field is true.".to_string(),
             },
             ImageItemError::DiscordWebHookError(e) => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,

@@ -49,6 +49,10 @@ pub(super) async fn delete(
         }
         Err(e) => return Err(DeleteItemError::RDBError(e)),
     };
+    // validation of is_rent is false
+    if item_model.is_rent {
+        return Err(DeleteItemError::IsRentIsTrueError);
+    }
     // validation of id is exist in MeiliSearch
     let filter_query = &format!(r#"id = "{}""#, id);
     let meilisearch_item: Vec<MeilisearchItemData> = meilisearch

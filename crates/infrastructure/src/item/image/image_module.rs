@@ -38,6 +38,10 @@ pub(super) async fn image(
         }
         Err(e) => return Err(ImageItemError::RDBError(e)),
     };
+    // validation of is_rent is false
+    if item_model.is_rent {
+        return Err(ImageItemError::IsRentIsTrueError);
+    }
     // validation of id is exist in MeiliSearch
     let filter_query = &format!(r#"id = "{}""#, (image_item_data.id));
     let meilisearch_item: Vec<MeilisearchItemData> = meilisearch

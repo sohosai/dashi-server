@@ -53,6 +53,10 @@ pub(super) async fn update(
         }
         Err(e) => return Err(UpdateItemError::RDBError(e)),
     };
+    // validation of is_rent is false
+    if item_model.is_rent {
+        return Err(UpdateItemError::IsRentIsTrueError);
+    }
     // validation of id is exist in MeiliSearch
     let filter_query = &format!(r#"id = "{}""#, update_item_data.id);
     let meilisearch_item: Vec<MeilisearchItemData> = meilisearch

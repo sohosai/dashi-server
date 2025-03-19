@@ -4,6 +4,8 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum TransferItemError {
+    #[error("IsRentIsTrueError: is_rent field is true.")]
+    IsRentIsTrueError,
     #[error(transparent)]
     DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
     #[error("CannotTransferRootItemError: Can not transfer root item.")]
@@ -35,6 +37,11 @@ pub enum TransferItemError {
 impl From<TransferItemError> for AppError {
     fn from(error: TransferItemError) -> Self {
         match error {
+            TransferItemError::IsRentIsTrueError => AppError {
+                status_code: StatusCode::BAD_REQUEST,
+                code: "transfer-item/is-rent-is-true".to_string(),
+                message: "IsRentIsTrueError: is_rent field is true.".to_string(),
+            },
             TransferItemError::DiscordWebHookError(e) => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,
                 code: "transfer-item/discord-webhook".to_string(),

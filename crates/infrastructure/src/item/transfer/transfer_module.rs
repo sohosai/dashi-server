@@ -160,6 +160,14 @@ pub(super) async fn transfer(
         // If new_parent_visible_id is descendant of visible_id
         return Err(TransferItemError::NewParentIdOneOfDescendantIdsError);
     }
+    //* validation of is_rent is false *//
+    let item_model = match Item::find_by_id(transfer_item_data.id).one(&rdb).await? {
+        Some(label_model) => label_model,
+        None => return Err(TransferItemError::IdNotFoundInItemTableError),
+    };
+    if item_model.is_rent {
+        return Err(TransferItemError::IsRentIsTrueError);
+    }
 
     ////* operation *////
     //* get old_parent_id *//
@@ -235,10 +243,6 @@ pub(super) async fn transfer(
     }
 
     //* Discord Webhook *//
-    let item_model = match Item::find_by_id(transfer_item_data.id).one(&rdb).await? {
-        Some(label_model) => label_model,
-        None => return Err(TransferItemError::IdNotFoundInItemTableError),
-    };
     let sender = DiscordWebHookSender {
         title: "物品の移動情報".to_string(),
         description: "以下の物品が移動されました。".to_string(),

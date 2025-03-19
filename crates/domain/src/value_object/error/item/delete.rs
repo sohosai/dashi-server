@@ -5,6 +5,8 @@ use crate::value_object::error::AppError;
 
 #[derive(Debug, Error)]
 pub enum DeleteItemError {
+    #[error("IsRentIsTrueError: is_rent field is true.")]
+    IsRentIsTrueError,
     #[error(transparent)]
     DiscordWebHookError(#[from] crate::value_object::error::discord::sender::DiscordWebHookError),
     #[error("IdConflictInItemTableError: Conflict VisibleId in Item Table.")]
@@ -40,6 +42,11 @@ pub enum DeleteItemError {
 impl From<DeleteItemError> for AppError {
     fn from(error: DeleteItemError) -> Self {
         match error {
+            DeleteItemError::IsRentIsTrueError => AppError {
+                status_code: StatusCode::BAD_REQUEST,
+                code: "delete-item/is-rent-is-true".to_string(),
+                message: "IsRentIsTrueError: is_rent field is true.".to_string(),
+            },
             DeleteItemError::DiscordWebHookError(e) => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,
                 code: "delete-item/discord-webhook".to_string(),

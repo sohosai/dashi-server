@@ -1,4 +1,8 @@
+/.direnv
+/.git
+/.github
 /.vscode
+/entity/target
 /init
 /meilisearch
 /migration/target
@@ -13,6 +17,7 @@
 .envrc
 .gitignore
 COPYING
+README.md
 dev.compose.yaml
 dev.Dockerfile
 entity.compose.yaml
@@ -20,8 +25,5 @@ flake.lock
 flake.nix
 prod.compose.yaml
 prod.Dockerfile
-README.md
 renovate.json
-return.compose.yaml
-return.Dockerfile
-stack.env
+

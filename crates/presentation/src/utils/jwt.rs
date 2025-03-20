@@ -36,6 +36,9 @@ pub async fn jwt_middleware(
             }
         });
 
+    ////////////////////////////////////
+    // mock start //
+    ////////////////////////////////////
     match token {
         Some(token) => {
             // check JWT
@@ -60,15 +63,15 @@ pub async fn jwt_middleware(
     tracing::info!("Handler");
     let response = next.run(request).await;
     //* postprocess *//
-    tracing::info!("Postprocess");
-    tracing::info!(
-        "Status: {}, headers: {:?}, request: {:?}",
-        response.status(),
-        response.headers(),
-        response.body()
-    );
+    tracing::info!("Success!");
     Ok(response)
+    ////////////////////////////////////
+    // mock end //
+    ////////////////////////////////////
 
+    ////////////////////////////////////
+    // 本番環境用 start //
+    ////////////////////////////////////
     // match token {
     //     Some(token) => {
     //         // check JWT
@@ -79,16 +82,9 @@ pub async fn jwt_middleware(
     //             Ok(_) => {
     //                 tracing::info!("Token is valid");
     //                 //* handler *//
-    //                 tracing::info!("Handler");
     //                 let response = next.run(request).await;
     //                 //* postprocess *//
-    //                 tracing::info!("Postprocess");
-    //                 tracing::info!(
-    //                     "Status: {}, headers: {:?}, request: {:?}",
-    //                     response.status(),
-    //                     response.headers(),
-    //                     response.body()
-    //                 );
+    //                 tracing::info!("Success!");
     //                 Ok(response)
     //             }
     //             Err(err) => {
@@ -100,4 +96,7 @@ pub async fn jwt_middleware(
     //     }
     //     None => Ok((StatusCode::FORBIDDEN, ()).into_response()),
     // }
+    ////////////////////////////////////
+    // 本番環境用 end //
+    ////////////////////////////////////
 }

@@ -15,7 +15,7 @@ use domain::{entity::data_type::rental::RentalData, value_object::error::AppErro
 
 #[utoipa::path(
     get,
-    path = "/api/rental",
+    path = "/api/rental/all",
     tag = "Rental",
     responses(
         (status = 200, description = "OK", body = RentalItemJson),

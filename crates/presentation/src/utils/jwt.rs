@@ -1,6 +1,7 @@
 use crate::models::rwlock_shared_state::RwLockSharedState;
 use axum::{
     extract::{Request, State},
+    http::StatusCode,
     middleware::Next,
     response::IntoResponse,
 };
@@ -39,39 +40,6 @@ pub async fn jwt_middleware(
     ////////////////////////////////////
     // mock start //
     ////////////////////////////////////
-    match token {
-        Some(token) => {
-            // check JWT
-            match remote_jwks_verifier
-                .verify::<Map<String, Value>>(&token)
-                .await
-            {
-                Ok(_) => {
-                    tracing::info!("Token is valid");
-                }
-                Err(err) => {
-                    tracing::info!("Token is invalid");
-                    tracing::info!("{}", err);
-                }
-            }
-        }
-        None => {
-            tracing::info!("Token is not found");
-        }
-    }
-    //* handler *//
-    tracing::info!("Handler");
-    let response = next.run(request).await;
-    //* postprocess *//
-    tracing::info!("Success!");
-    Ok(response)
-    ////////////////////////////////////
-    // mock end //
-    ////////////////////////////////////
-
-    ////////////////////////////////////
-    // 本番環境用 start //
-    ////////////////////////////////////
     // match token {
     //     Some(token) => {
     //         // check JWT
@@ -81,21 +49,62 @@ pub async fn jwt_middleware(
     //         {
     //             Ok(_) => {
     //                 tracing::info!("Token is valid");
-    //                 //* handler *//
-    //                 let response = next.run(request).await;
-    //                 //* postprocess *//
-    //                 tracing::info!("Success!");
-    //                 Ok(response)
     //             }
     //             Err(err) => {
     //                 tracing::info!("Token is invalid");
     //                 tracing::info!("{}", err);
-    //                 Ok((StatusCode::UNAUTHORIZED, ()).into_response())
     //             }
     //         }
     //     }
-    //     None => Ok((StatusCode::FORBIDDEN, ()).into_response()),
+    //     None => {
+    //         tracing::info!("Token is not found");
+    //     }
     // }
+    // //* handler *//
+    // tracing::info!("Handler");
+    // let response = next.run(request).await;
+    // //* postprocess *//
+    // tracing::info!("Success!");
+    // Ok(response)
+    ////////////////////////////////////
+    // mock end //
+    ////////////////////////////////////
+
+    ////////////////////////////////////
+    // 本番環境用 start //
+    ////////////////////////////////////
+    match token {
+        Some(token) => {
+            // check JWT
+            match remote_jwks_verifier
+                .verify::<Map<String, Value>>(&token)
+                .await
+            {
+                Ok(_) => {
+                    tracing::info!("Token is valid");
+                    //* handler *//
+                    let response = next.run(request).await;
+                    //* postprocess *//
+                    tracing::info!("Success!");
+                    Ok(response)
+                }
+                Err(err) => {
+                    tracing::info!("Token is invalid");
+                    tracing::info!("{}", err);
+                    Err(AppError {
+                        status_code: StatusCode::UNAUTHORIZED,
+                        code: "authrization/unauthorized".to_string(),
+                        message: "UnauthorizedError: token is invaild.".to_string(),
+                    })
+                }
+            }
+        }
+        None => Err(AppError {
+            status_code: StatusCode::FORBIDDEN,
+            code: "authrization/forbiden".to_string(),
+            message: "ForbidenError: Unauthorized access.".to_string(),
+        }),
+    }
     ////////////////////////////////////
     // 本番環境用 end //
     ////////////////////////////////////

@@ -11,7 +11,7 @@ info:
     url: http://www.wtfpl.net
   version: 0.0.1
 servers:
-- url: http://0.0.0.0:5000
+- url: https://dashi-api.sohosai.com
 paths:
   /:
     get:

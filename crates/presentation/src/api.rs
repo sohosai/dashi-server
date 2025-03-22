@@ -80,7 +80,7 @@ pub async fn api() -> Result<(), ApiError> {
             url = "http://www.wtfpl.net"
         ),
     ),
-    servers((url = "http://0.0.0.0:5000")),
+    servers((url = "https://dashi-api.sohosai.com")),
     tags(
         (name = "Item", description = "物品に関係するエンドポイント"),
         (name = "Csv", description = "csv出力に関するエンドポイント"),

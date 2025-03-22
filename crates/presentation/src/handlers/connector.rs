@@ -1,8 +1,8 @@
 use crate::models::rwlock_shared_state::RwLockSharedState;
 use application::usecase::connector::{
-    all_connectors::AllConnectorsOutputs,
+    all_connectors::{AllConnectorsJson, AllConnectorsOutputs},
     register::{RegisterConnectorInputs, RegisterConnectorOutputs},
-    search::{SearchConnectorInputs, SearchConnectorOutputs},
+    search::{SearchConnectorInputs, SearchConnectorJson, SearchConnectorOutputs},
     status::{StatusConnectorInputs, StatusConnectorOutputs},
 };
 use axum::{
@@ -15,7 +15,7 @@ use domain::{
     entity::data_type::{
         register_connector::RegisterConnectorData, status_connector::StatusConnectorData,
     },
-    value_object::error::AppError,
+    value_object::error::{AppError, ResponseError},
 };
 use std::collections::HashMap;
 

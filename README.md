@@ -1,6 +1,6 @@
 # Service and Container
 
-## Open API Documentation
+## OpenAPI Documentation
 
 https://sohosai.github.io/dashi-server
 

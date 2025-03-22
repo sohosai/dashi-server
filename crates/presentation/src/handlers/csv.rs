@@ -1,7 +1,10 @@
 use crate::models::rwlock_shared_state::RwLockSharedState;
-use application::usecase::csv::{depreiation::DepreiationCsvOutputs, item::ItemCsvOutputs};
+use application::usecase::csv::{
+    depreiation::{DepreiationCsvJson, DepreiationCsvOutputs},
+    item::{ItemCsvJson, ItemCsvOutputs},
+};
 use axum::{extract::State, http::StatusCode, response::IntoResponse, Json};
-use domain::value_object::error::AppError;
+use domain::value_object::error::{AppError, ResponseError};
 
 #[utoipa::path(
     get,

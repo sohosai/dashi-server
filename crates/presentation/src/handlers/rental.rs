@@ -11,7 +11,10 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-use domain::{entity::data_type::rental::RentalData, value_object::error::AppError};
+use domain::{
+    entity::data_type::rental::RentalData,
+    value_object::error::{AppError, ResponseError},
+};
 
 #[utoipa::path(
     get,

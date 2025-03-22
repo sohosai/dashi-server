@@ -1,21 +1,13 @@
+use crate::models::rwlock_shared_state::RwLockSharedState;
 use application::usecase::{
     generate::{GenerateInputs, GenerateOutputs},
     utils::healthcheck::HealthCheckUseCase,
 };
 use axum::{extract::State, http::StatusCode, response::IntoResponse, Json};
 use domain::{
-    entity::data_type::generate_data_request::GenerateDataRequest, value_object::error::AppError,
+    entity::data_type::{generate::GenerateData, generate_data_request::GenerateDataRequest},
+    value_object::error::{AppError, ResponseError},
 };
-
-use crate::models::rwlock_shared_state::RwLockSharedState;
-
-pub async fn login_handler(State(shared_state): State<RwLockSharedState>) -> String {
-    tracing::info!("reached login handler.");
-    let shared_model = shared_state.read().await;
-    //operation
-    drop(shared_model);
-    "login_handler".to_string()
-}
 
 #[utoipa::path(
     get,

@@ -1,8 +1,8 @@
 use crate::models::rwlock_shared_state::RwLockSharedState;
 use application::usecase::color::{
-    all_colors::AllColorsOutputs,
+    all_colors::{AllColorsJson, AllColorsOutputs},
     register::{RegisterColorInputs, RegisterColorOutputs},
-    search::{SearchColorInputs, SearchColorOutputs},
+    search::{SearchColorInputs, SearchColorJson, SearchColorOutputs},
     update::{UpdateColorInputs, UpdateColorOutputs},
 };
 use axum::{
@@ -13,7 +13,7 @@ use axum::{
 };
 use domain::{
     entity::data_type::{register_color::RegisterColorData, update_color::UpdateColorData},
-    value_object::error::AppError,
+    value_object::error::{AppError, ResponseError},
 };
 use std::collections::HashMap;
 

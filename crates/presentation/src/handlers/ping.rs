@@ -1,5 +1,5 @@
 use axum::{http::StatusCode, response::IntoResponse};
-use domain::value_object::error::AppError;
+use domain::value_object::error::{AppError, ResponseError};
 
 #[utoipa::path(
     get,

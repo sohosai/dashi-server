@@ -13,7 +13,10 @@ use axum::{
 use domain::factory::shared_state::SharedStateFactory;
 use infrastructure::shared_state::SharedState;
 use tower_http::cors::{Any, CorsLayer};
-use utoipa::OpenApi;
+use utoipa::{
+    openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme},
+    Modify, OpenApi,
+};
 
 //axum
 pub async fn api() -> Result<(), ApiError> {
@@ -151,6 +154,27 @@ pub async fn api() -> Result<(), ApiError> {
         domain::entity::data_type::trash_item::TrashItemData,
         domain::entity::data_type::rental_item::RentalItemData,
         application::usecase::rental::all_rental_items::RentalItemJson,
-    ))
+    )),
+    modifiers(&SecurityAddon),
 )]
 pub struct ApiDoc;
+
+struct SecurityAddon;
+
+impl Modify for SecurityAddon {
+    fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
+        openapi.components = Some(
+            utoipa::openapi::ComponentsBuilder::new()
+                .security_scheme(
+                    "api_jwt_token",
+                    SecurityScheme::Http(
+                        HttpBuilder::new()
+                            .scheme(HttpAuthScheme::Bearer)
+                            .bearer_format("JWT")
+                            .build(),
+                    ),
+                )
+                .build(),
+        )
+    }
+}

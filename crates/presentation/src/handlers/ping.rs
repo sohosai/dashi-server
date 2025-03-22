@@ -9,6 +9,7 @@ use domain::value_object::error::{AppError, ResponseError};
         (status = 200, description = "OK"),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn ping_handler() -> Result<impl IntoResponse, AppError> {
     tracing::info!("reached ping handler.");

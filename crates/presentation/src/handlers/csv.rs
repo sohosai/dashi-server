@@ -14,6 +14,7 @@ use domain::value_object::error::{AppError, ResponseError};
         (status = 200, description = "OK", body = DepreiationCsvJson),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn depreiation_handler(
     State(shared_state): State<RwLockSharedState>,
@@ -39,6 +40,7 @@ pub async fn depreiation_handler(
         (status = 200, description = "OK", body = ItemCsvJson),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn item_handler(
     State(shared_state): State<RwLockSharedState>,

@@ -61,6 +61,7 @@ pub async fn register_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn all_colors_handler(
     State(shared_state): State<RwLockSharedState>,
@@ -88,6 +89,7 @@ pub async fn all_colors_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn search_handler(
     Query(keywords): Query<HashMap<String, String>>,
@@ -124,6 +126,7 @@ pub async fn search_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn update_handler(
     Path(id): Path<u32>,

@@ -17,6 +17,7 @@ use domain::{
         (status = 200, description = "OK"),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn healthcheck_handler(
     State(shared_state): State<RwLockSharedState>,
@@ -42,6 +43,7 @@ pub async fn healthcheck_handler(
         (status = 201, description = "Created", body = GenerateData),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn generate_handler(
     State(shared_state): State<RwLockSharedState>,

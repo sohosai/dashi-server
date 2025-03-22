@@ -38,6 +38,7 @@ use std::collections::HashMap;
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn search_handler(
     Query(keywords): Query<HashMap<String, String>>,
@@ -77,6 +78,7 @@ pub async fn search_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn individual_item_handler(
     Path(id): Path<u32>,
@@ -112,6 +114,7 @@ pub async fn individual_item_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn image_handler(
     Path(id): Path<u32>,
@@ -187,6 +190,7 @@ pub async fn register_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn update_handler(
     Path(id): Path<u32>,
@@ -222,6 +226,7 @@ pub async fn update_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn delete_handler(
     Path(id): Path<u32>,
@@ -250,6 +255,7 @@ pub async fn delete_handler(
         (status = 200, description = "OK", body = TrashItemDataJson),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn trash_handler(
     State(shared_state): State<RwLockSharedState>,
@@ -280,6 +286,7 @@ pub async fn trash_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn transfer_handler(
     State(shared_state): State<RwLockSharedState>,

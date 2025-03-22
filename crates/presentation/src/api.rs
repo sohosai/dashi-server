@@ -166,7 +166,7 @@ impl Modify for SecurityAddon {
         openapi.components = Some(
             utoipa::openapi::ComponentsBuilder::new()
                 .security_scheme(
-                    "api_jwt_token",
+                    "jwt_token",
                     SecurityScheme::Http(
                         HttpBuilder::new()
                             .scheme(HttpAuthScheme::Bearer)

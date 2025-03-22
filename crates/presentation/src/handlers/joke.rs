@@ -9,6 +9,7 @@ use domain::value_object::error::{AppError, ResponseError};
         (status = 451, description = "Unavailable For Legal Reasons", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn unavailable_handler() -> Result<impl IntoResponse, AppError> {
     tracing::info!("reached joke/unavailable handler.");
@@ -30,6 +31,7 @@ pub async fn unavailable_handler() -> Result<impl IntoResponse, AppError> {
         (status = 418, description = "I'm A Teapot", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn teapot_handler() -> Result<impl IntoResponse, AppError> {
     tracing::info!("reached joke/teapot handler.");

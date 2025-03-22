@@ -24,6 +24,7 @@ use domain::{
         (status = 200, description = "OK", body = RentalItemJson),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn all_rental_items_handler(
     State(shared_state): State<RwLockSharedState>,
@@ -58,6 +59,7 @@ pub async fn all_rental_items_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn rent_handler(
     Path(id): Path<u32>,
@@ -94,6 +96,7 @@ pub async fn rent_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn update_handler(
     Path(id): Path<u32>,
@@ -126,6 +129,7 @@ pub async fn update_handler(
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn replace_handler(
     Path(id): Path<u32>,

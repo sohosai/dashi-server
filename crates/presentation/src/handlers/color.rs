@@ -30,6 +30,7 @@ use std::collections::HashMap;
         (status = 400, description = "Bad Request", body = ResponseError),
         (status = 500, description = "Internal Server Error", body = ResponseError),
     ),
+    security(("jwt_token" = [])),
 )]
 pub async fn register_handler(
     State(shared_state): State<RwLockSharedState>,

@@ -81,6 +81,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/color/search:
     get:
       tags:
@@ -450,6 +452,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/item/search:
     get:
       tags:

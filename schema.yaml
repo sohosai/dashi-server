@@ -27,6 +27,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/color:
     get:
       tags:
@@ -51,6 +53,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
     post:
       tags:
       - Color
@@ -106,6 +110,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/color/{id}:
     patch:
       tags:
@@ -141,6 +147,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/connector:
     get:
       tags:
@@ -165,6 +173,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
     post:
       tags:
       - Connector
@@ -191,6 +201,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/connector/search:
     get:
       tags:
@@ -220,6 +232,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/connector/{id}:
     patch:
       tags:
@@ -255,6 +269,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/csv/depreiation:
     get:
       tags:
@@ -273,6 +289,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/csv/item:
     get:
       tags:
@@ -291,6 +309,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/generate:
     post:
       tags:
@@ -316,6 +336,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/healthcheck:
     get:
       tags:
@@ -330,6 +352,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/item/delete/{id}:
     delete:
       tags:
@@ -359,6 +383,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/item/image/{id}:
     put:
       tags:
@@ -395,6 +421,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/item/register:
     post:
       tags:
@@ -451,6 +479,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/item/transfer:
     patch:
       tags:
@@ -478,6 +508,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/item/trash:
     get:
       tags:
@@ -496,6 +528,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/item/update/{id}:
     patch:
       tags:
@@ -532,6 +566,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/item/{id}:
     get:
       tags:
@@ -565,6 +601,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/joke/teapot:
     get:
       tags:
@@ -583,6 +621,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/joke/unavailable:
     get:
       tags:
@@ -601,6 +641,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/rental/all:
     get:
       tags:
@@ -619,6 +661,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/rental/rent/{id}:
     patch:
       tags:
@@ -655,6 +699,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/rental/replace/{id}:
     patch:
       tags:
@@ -684,6 +730,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
   /api/rental/update/{id}:
     patch:
       tags:
@@ -720,9 +768,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseError'
+      security:
+      - jwt_token: []
 components:
   securitySchemes:
-    api_jwt_token:
+    jwt_token:
       type: http
       scheme: bearer
       bearerFormat: JWT

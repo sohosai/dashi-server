@@ -14,7 +14,10 @@ use domain::factory::shared_state::SharedStateFactory;
 use infrastructure::shared_state::SharedState;
 use tower_http::cors::{Any, CorsLayer};
 use utoipa::{
-    openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme},
+    openapi::{
+        self,
+        security::{HttpAuthScheme, HttpBuilder, SecurityScheme},
+    },
     Modify, OpenApi,
 };
 
@@ -162,19 +165,17 @@ pub struct ApiDoc;
 struct SecurityAddon;
 
 impl Modify for SecurityAddon {
-    fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
-        openapi.components = Some(
-            utoipa::openapi::ComponentsBuilder::new()
-                .security_scheme(
-                    "jwt_token",
-                    SecurityScheme::Http(
-                        HttpBuilder::new()
-                            .scheme(HttpAuthScheme::Bearer)
-                            .bearer_format("JWT")
-                            .build(),
-                    ),
-                )
-                .build(),
-        )
+    fn modify(&self, openapi: &mut openapi::OpenApi) {
+        if let Some(schema) = openapi.components.as_mut() {
+            schema.add_security_scheme(
+                "jwt_token",
+                SecurityScheme::Http(
+                    HttpBuilder::new()
+                        .scheme(HttpAuthScheme::Bearer)
+                        .bearer_format("JWT")
+                        .build(),
+                ),
+            );
+        }
     }
 }

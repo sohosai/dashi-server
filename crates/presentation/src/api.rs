@@ -1,3 +1,6 @@
+use crate::{
+    error::api::ApiError, handlers::ping::ping_handler, routes, utils::jwt::jwt_middleware,
+};
 use application::model::shared_state::SharedStateUseCase;
 use async_std::sync::{Arc, RwLock};
 use axum::{
@@ -7,15 +10,10 @@ use axum::{
     routing::get,
     Router,
 };
-use tower_http::cors::{Any, CorsLayer};
-use utoipa::OpenApi;
-
-// レイヤードアーキテクチャに違反しているが、Rustの性質上不可能なのでinfrastructure層及びdomain層から直接呼び出す
-use crate::{
-    error::api::ApiError, handlers::ping::ping_handler, routes, utils::jwt::jwt_middleware,
-};
 use domain::factory::shared_state::SharedStateFactory;
 use infrastructure::shared_state::SharedState;
+use tower_http::cors::{Any, CorsLayer};
+use utoipa::OpenApi;
 
 //axum
 pub async fn api() -> Result<(), ApiError> {

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: dashi-server
-  description: Thsi is a dashi-server API document.
+  description: This is a dashi-server API document.
   contact:
     name: Myxogastria0808
     url: https://yukiosada.work

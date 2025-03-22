@@ -70,7 +70,7 @@ pub async fn api() -> Result<(), ApiError> {
     info(
         title = "dashi-server",
         version = "0.0.1",
-        description = "Thsi is a dashi-server API document.",
+        description = "This is a dashi-server API document.",
         contact(
             name = "Myxogastria0808",
             email = "r.rstudio.c@gmail.com",

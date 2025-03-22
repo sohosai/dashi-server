@@ -26,4 +26,4 @@ flake.nix
 prod.compose.yaml
 prod.Dockerfile
 renovate.json
-
+schema.yaml

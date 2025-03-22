@@ -9,7 +9,6 @@ use axum::{
 };
 use tower_http::cors::{Any, CorsLayer};
 use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
 
 // レイヤードアーキテクチャに違反しているが、Rustの性質上不可能なのでinfrastructure層及びdomain層から直接呼び出す
 use crate::{
@@ -50,7 +49,6 @@ pub async fn api() -> Result<(), ApiError> {
     let app: Router<()> = Router::new()
         .route("/", get(ping_handler))
         .merge(routes::root::root_route())
-        .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .layer(middleware::from_fn_with_state(
             Arc::clone(&shared_state),
             jwt_middleware,
@@ -157,4 +155,4 @@ pub async fn api() -> Result<(), ApiError> {
         application::usecase::rental::all_rental_items::RentalItemJson,
     ))
 )]
-struct ApiDoc;
+pub struct ApiDoc;

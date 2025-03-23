@@ -12,5 +12,5 @@ pub fn color_route() -> Router<RwLockSharedState> {
         .route("/color", post(register_handler))
         .route("/color", get(all_colors_handler))
         .route("/color/search", get(search_handler))
-        .route("/color/:id", patch(update_handler))
+        .route("/color/{id}", patch(update_handler))
 }

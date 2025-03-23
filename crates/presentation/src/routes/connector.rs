@@ -14,5 +14,5 @@ pub fn connector_route() -> Router<RwLockSharedState> {
         .route("/connector", post(register_handler))
         .route("/connector", get(all_connectors_handler))
         .route("/connector/search", get(search_handler))
-        .route("/connector/:id", patch(status_handler))
+        .route("/connector/{id}", patch(status_handler))
 }

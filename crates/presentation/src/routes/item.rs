@@ -13,12 +13,12 @@ use axum::{
 pub fn item_route() -> Router<RwLockSharedState> {
     let item_routes = Router::new()
         .route("/search", get(search_handler))
-        .route("/:id", get(individual_item_handler))
-        .route("/archive/:limit", get(trash_handler))
+        .route("/{id}", get(individual_item_handler))
+        .route("/archive/{limit}", get(trash_handler))
         .route("/register", post(register_handler))
-        .route("/update/:id", patch(update_handler))
-        .route("/image/:id", put(image_handler))
-        .route("/delete/:id", delete(delete_handler))
+        .route("/update/{id}", patch(update_handler))
+        .route("/image/{id}", put(image_handler))
+        .route("/delete/{id}", delete(delete_handler))
         .route("/trash", get(trash_handler))
         .route("/transfer", patch(transfer_handler));
     Router::new().nest("/item", item_routes)

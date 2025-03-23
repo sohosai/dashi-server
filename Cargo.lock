@@ -2435,7 +2435,6 @@ dependencies = [
  "regex",
  "sea-orm 1.1.4",
  "serde",
- "serde_derive",
  "serde_json",
  "thiserror 2.0.12",
  "tokio",

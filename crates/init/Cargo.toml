@@ -29,6 +29,5 @@ once_cell.workspace = true
 thiserror.workspace = true
 # utils
 serde.workspace = true
-serde_derive.workspace = true
 csv.workspace = true
 regex.workspace = true

@@ -2,9 +2,7 @@ name: Deploy Container
 
 on:
   push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+    branches: ["main"]
   workflow_dispatch:
 
 env:

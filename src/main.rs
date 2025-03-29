@@ -1,3 +1,3 @@
 fn main() {
-    println!("Hello, world!");
+    println!("Auth0 dashi-server sample");
 }

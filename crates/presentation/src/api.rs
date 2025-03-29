@@ -1,5 +1,6 @@
 use crate::{
-    error::api::ApiError, handlers::ping::ping_handler, routes, utils::jwt::jwt_middleware,
+    error::api::ApiError, handlers::ping::ping_handler, middlewares::logging::logging_middleware,
+    routes,
 };
 use application::model::shared_state::SharedStateUseCase;
 use async_std::sync::{Arc, RwLock};
@@ -53,10 +54,7 @@ pub async fn api() -> Result<(), ApiError> {
     let app: Router<()> = Router::new()
         .route("/", get(ping_handler))
         .merge(routes::root::root_route())
-        .layer(middleware::from_fn_with_state(
-            Arc::clone(&shared_state),
-            jwt_middleware,
-        ))
+        .layer(middleware::from_fn(logging_middleware))
         .layer(cors)
         .layer(DefaultBodyLimit::max(1024 * 1024 * 100)) //100MB
         .with_state(Arc::clone(&shared_state));

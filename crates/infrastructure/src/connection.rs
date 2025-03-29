@@ -9,7 +9,6 @@ use meilisearch_sdk::client::Client;
 use neo4rs::Graph;
 use sea_orm::DatabaseConnection;
 
-pub mod auth0;
 pub mod discord;
 pub mod graphdb;
 pub mod meilisearch;

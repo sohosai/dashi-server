@@ -21,8 +21,6 @@ meilisearch-sdk.workspace = true
 neo4rs.workspace = true
 #cloudflare r2
 cf-r2-sdk.workspace = true
-# auth0
-jwtk.workspace = true
 # discord webhook
 reqwest.workspace = true
 # logging

@@ -9,37 +9,37 @@ pub async fn discord_rental_webhook_sender(
     //* Discord WebHook *//
     let mut fields = vec![
         discord::json::Field {
-            name: "visible_id".to_string(),
+            name: "ラベルID".to_string(),
             value: sender.item.visible_id.to_owned(),
         },
         discord::json::Field {
-            name: "name".to_string(),
+            name: "物品名".to_string(),
             value: sender.item.name.to_owned(),
         },
     ];
     if let Some(latest_rent_at) = sender.item.latest_rent_at {
         fields.push(discord::json::Field {
-            name: "recipient".to_string(),
+            name: "借用者".to_string(),
             value: sender.item.recipient.to_owned(),
         });
         fields.push(discord::json::Field {
-            name: "rental_description".to_string(),
+            name: "貸し出し中に関する備考".to_string(),
             value: sender.item.rental_description.to_owned(),
         });
         fields.push(discord::json::Field {
-            name: "latest_rent_at".to_string(),
+            name: "最終貸し出し日時 (UTC)".to_string(),
             value: latest_rent_at.to_string(),
         });
     };
     if let Some(scheduled_replace_at) = sender.item.scheduled_replace_at {
         fields.push(discord::json::Field {
-            name: "scheduled_replace_at".to_string(),
+            name: "返却予定日時 (JST)".to_string(),
             value: scheduled_replace_at.to_string(),
         })
     };
     if let Some(latest_replace_at) = sender.item.latest_replace_at {
         fields.push(discord::json::Field {
-            name: "latest_replace_at".to_string(),
+            name: "最終返却日時 (UTC)".to_string(),
             value: latest_replace_at.to_string(),
         })
     };

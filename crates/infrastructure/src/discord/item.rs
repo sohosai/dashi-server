@@ -24,11 +24,11 @@ pub async fn discord_item_webhook_sender(
             },
             fields: vec![
                 discord::json::Field {
-                    name: "visible_id".to_string(),
+                    name: "ラベルID".to_string(),
                     value: sender.item.visible_id.to_owned(),
                 },
                 discord::json::Field {
-                    name: "name".to_string(),
+                    name: "物品名".to_string(),
                     value: sender.item.name.to_owned(),
                 },
             ],

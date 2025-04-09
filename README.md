@@ -1,96 +1,45 @@
-# Service and Container
+# dashi-server
+
+<div align="center">
+  <img src="https://github.com/sohosai/dashi-client/blob/main/assets/dashi.svg" width="300px" height="300px" />
+</div>
 
 ## OpenAPI Documentation
 
 https://sohosai.github.io/dashi-server
 
-## RDB (Container)
+## 開発環境
 
-- PostgreSQL
+### 開発環境の構築
 
-## GraphDB (Container)
+#### 1. .envの設置
 
-- Neo4j
+シークレットな情報のため、詳細はvaultwardenを参照
 
-## Meilisearch (Container)
-
-- Meilisearch
-
-## Object Strage (Service)
-
-- Cloudflare R2
-
-# 構造
-
-server では、Layered Architecture を採用している
-
-※ SeaORM を採用している関係で構造が乱れているが、 SeaORM を使用する場合はこの構造のままの方が使いやすいので、この構造のままにしている
-
-```mermaid
-flowchart TD
-    presentation --> application
-    presentation --> domain
-    presentation --> infrastructure
-    application --> domain
-    application --> entity
-    domain --> entity
-    infrastructure --> domain
-    infrastructure --> entity
-    init --> infrastructure
-    init --> domain
-    migration
-```
-
-## presentation
-
-- src/presentation 以下の binary crate
-
-## application
-
-- src/application 以下の library crate
-
-## domain
-
-- src/domain 以下の library crate
-
-## infrastructure
-
-- src/infrastructure 以下の library crate
-- migration
-- entity
-
-# 開発環境
-
-## 開発環境の構築
-
-### 1. .envの設置
-
-シークレットな情報のため、詳細はscrapbox参照
-
-### 2. docker-compose up (dev)
+#### 2. docker-compose up (dev)
 
 ```sh
 docker-compose -f dev.compose.yaml up -d
 ```
 
-### 3. .envの編集
+#### 3. .envの編集
 
-シークレットな情報のため、詳細はscrapbox参照
+シークレットな情報のため、詳細はvaultwardenを参照
 
-### 4. server の起動
+#### 4. server の起動
 
 ```sh
 cargo run --bin presentation
 ```
 
-## 開発環境の削除
+### 開発環境の削除
 
 ```sh
 docker-compose -f dev.compose.yaml down --rmi all --volumes
 sudo rm -rf postgres neo4j meilisearch init
 ```
 
-## 各cointainerの登録情報の確認方法
+### 各cointainerの登録情報の確認方法
 
 - meilisearch
 
@@ -122,7 +71,7 @@ shell上で以下コマンドを実行
  sudo docker exec -it postgres psql -U <POSTGRES_USER> -d <POSTGRES_DB>
 ```
 
-## 開発環境の削除
+### 開発環境の削除
 
 ```sh
 docker-compose -f db.compose.yaml down --rmi all --volumes
@@ -130,22 +79,22 @@ docker-compose -f server.compose.yaml down --rmi all --volumes
 sudo rm -rf postgres neo4j meilisearch init
 ```
 
-## テーブルの更新
+### テーブルの更新
 
-### 1. docker-compose up (entity)
+#### 1. docker-compose up (entity)
 
 ```sh
 docker-compose -f entity.compose.yaml up -d
 ```
 
-### 2. Migration
+#### 2. Migration
 
 ```sh
 cargo run --manifest-path ./migration/Cargo.toml -- refresh -u postgres://<POSTGRES_USER>:<POSTGRES_PASSWORD>@localhost:<POSTGRES_PORT>/<POSTGRES_DB>
 ```
 
 
-### 3. Entityの生成
+#### 3. Entityの生成
 
 ```sh
 sea-orm-cli generate entity \
@@ -153,23 +102,41 @@ sea-orm-cli generate entity \
     -o entity/src
 ```
 
-# 本番環境
+## 本番環境
 
-## 本番環境の構築
+### 本番環境の構築
 
-### 1. .envの設置
+#### 1. .envの設置
 
-シークレットな情報のため、詳細はscrapbox参照
+シークレットな情報のため、詳細はvaultwardenを参照
 
-### 2. docker-compose up (prod)
+#### 2. docker-compose up (prod)
 
 ```sh
 docker-compose -f prod.compose.yaml up -d
 ```
 
-# 初期データ
+## Service and Container
 
-## RDB
+## RDB (Container)
+
+- PostgreSQL
+
+### GraphDB (Container)
+
+- Neo4j
+
+### Meilisearch (Container)
+
+- Meilisearch
+
+### Object Strage (Service)
+
+- Cloudflare R2
+
+## 初期データ
+
+### RDB
 
 ```mermaid
 erDiagram
@@ -213,7 +180,7 @@ erDiagram
     }
 ```
 
-## Meilisearch
+### Meilisearch
 
 ```mermaid
 erDiagram
@@ -252,7 +219,7 @@ erDiagram
     }
 ```
 
-## GraphDB
+### GraphDB
 
 ```mermaid
 flowchart TD

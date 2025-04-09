@@ -12,7 +12,7 @@ https://sohosai.github.io/dashi-server
 
 ### 開発環境の構築
 
-#### 1. .envの設置
+#### 1. `.env`の設置
 
 シークレットな情報のため、詳細はvaultwardenを参照
 
@@ -22,7 +22,7 @@ https://sohosai.github.io/dashi-server
 docker-compose -f dev.compose.yaml up -d
 ```
 
-#### 3. .envの編集
+#### 3. `.env`の編集
 
 シークレットな情報のため、詳細はvaultwardenを参照
 
@@ -106,7 +106,7 @@ sea-orm-cli generate entity \
 
 ### 本番環境の構築
 
-#### 1. .envの設置
+#### 1. `.env`の設置
 
 シークレットな情報のため、詳細はvaultwardenを参照
 

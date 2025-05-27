@@ -39,7 +39,7 @@ pub async fn api() -> Result<(), ApiError> {
 
     // CORS
     let cors: CorsLayer = CorsLayer::new()
-        .allow_headers([header::AUTHORIZATION, header::CONTENT_TYPE])
+        .allow_headers([header::CONTENT_TYPE])
         .expose_headers([header::CONTENT_DISPOSITION])
         .allow_methods([
             Method::POST,
@@ -48,7 +48,7 @@ pub async fn api() -> Result<(), ApiError> {
             Method::PATCH,
             Method::DELETE,
         ])
-        .allow_origin(Any);
+        .allow_origin(["https://dashi.sohosai.com".parse::<HeaderValue>().unwrap()]);
 
     // Router
     let app: Router<()> = Router::new()

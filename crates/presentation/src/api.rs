@@ -6,14 +6,14 @@ use application::model::shared_state::SharedStateUseCase;
 use async_std::sync::{Arc, RwLock};
 use axum::{
     extract::DefaultBodyLimit,
-    http::{header, Method},
+    http::{header, HeaderValue, Method},
     middleware,
     routing::get,
     Router,
 };
 use domain::factory::shared_state::SharedStateFactory;
 use infrastructure::shared_state::SharedState;
-use tower_http::cors::{Any, CorsLayer};
+use tower_http::cors::CorsLayer;
 use utoipa::{
     openapi::{
         self,

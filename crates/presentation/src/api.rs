@@ -40,7 +40,7 @@ pub async fn api() -> Result<(), ApiError> {
     // CORS
     let cors: CorsLayer = CorsLayer::new()
         .allow_headers([header::CONTENT_TYPE])
-        .expose_headers([header::CONTENT_DISPOSITION])
+        .allow_credentials(true)
         .allow_methods([
             Method::POST,
             Method::GET,

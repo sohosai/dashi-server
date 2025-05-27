@@ -54,8 +54,8 @@ pub async fn api() -> Result<(), ApiError> {
     let app: Router<()> = Router::new()
         .route("/", get(ping_handler))
         .merge(routes::root::root_route())
-        .layer(middleware::from_fn(logging_middleware))
         .layer(cors)
+        .layer(middleware::from_fn(logging_middleware))
         .layer(DefaultBodyLimit::max(1024 * 1024 * 100)) //100MB
         .with_state(Arc::clone(&shared_state));
 

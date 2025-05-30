@@ -43,7 +43,7 @@ sudo rm -rf postgres neo4j meilisearch init
 
 - meilisearch
 
-以下のURLにアクセス 
+以下のURLにアクセス
 
 ※マスターキー(`MEILI_MASTER_KEY`)及びポート番号(`MEILI_PORT`)は`.env`参照
 
@@ -93,7 +93,6 @@ docker-compose -f entity.compose.yaml up -d
 cargo run --manifest-path ./migration/Cargo.toml -- refresh -u postgres://<POSTGRES_USER>:<POSTGRES_PASSWORD>@localhost:<POSTGRES_PORT>/<POSTGRES_DB>
 ```
 
-
 #### 3. Entityの生成
 
 ```sh
@@ -108,7 +107,7 @@ sea-orm-cli generate entity \
 
 #### 1. `.env`の設置
 
-シークレットな情報のため、詳細はvaultwardenを参照
+シークレットな情報のため、詳細は担当に聞くこと
 
 #### 2. docker-compose up (prod)
 

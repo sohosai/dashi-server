@@ -48,7 +48,10 @@ pub async fn api() -> Result<(), ApiError> {
             Method::PATCH,
             Method::DELETE,
         ])
-        .allow_origin(["https://dashi.sohosai.com".parse::<HeaderValue>().unwrap()]);
+        .allow_origin([
+            "http://localhost:3000".parse::<HeaderValue>().unwrap(),
+            "https://dashi.sohosai.com".parse::<HeaderValue>().unwrap(),
+        ]);
 
     // Router
     let app: Router<()> = Router::new()

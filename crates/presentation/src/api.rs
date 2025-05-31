@@ -6,14 +6,14 @@ use application::model::shared_state::SharedStateUseCase;
 use async_std::sync::{Arc, RwLock};
 use axum::{
     extract::DefaultBodyLimit,
-    http::{header, HeaderValue, Method},
+    http::{header, Method},
     middleware,
     routing::get,
     Router,
 };
 use domain::factory::shared_state::SharedStateFactory;
 use infrastructure::shared_state::SharedState;
-use tower_http::cors::CorsLayer;
+use tower_http::cors::{Any, CorsLayer};
 use utoipa::{
     openapi::{
         self,
@@ -48,10 +48,7 @@ pub async fn api() -> Result<(), ApiError> {
             Method::PATCH,
             Method::DELETE,
         ])
-        .allow_origin([
-            "http://localhost:3000".parse::<HeaderValue>().unwrap(),
-            "https://dashi.sohosai.com".parse::<HeaderValue>().unwrap(),
-        ]);
+        .allow_origin(Any);
 
     // Router
     let app: Router<()> = Router::new()

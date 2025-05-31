@@ -84,12 +84,6 @@ services:
       - "5000:5000"
     tty: true
     restart: always
-  # test
-  dashi-client:
-    image: ghcr.io/sohosai/dashi-client/client:main
-    container_name: dashi-client
-    ports:
-      - "3000:3000"
 
 volumes:
   dashi-postgres:

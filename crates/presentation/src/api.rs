@@ -49,7 +49,7 @@ pub async fn api() -> Result<(), ApiError> {
             Method::DELETE,
         ])
         .allow_origin([
-            "http://localhost:5137".parse::<HeaderValue>().unwrap(),
+            "http://localhost:5173".parse::<HeaderValue>().unwrap(),
             "https://dashi.sohosai.com".parse::<HeaderValue>().unwrap(),
         ]);
 

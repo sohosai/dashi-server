@@ -1,5 +1,5 @@
 # Builder
-FROM rust:1.85.1 AS builder
+FROM rust:1.88.0 AS builder
 
 WORKDIR /app
 COPY . /app

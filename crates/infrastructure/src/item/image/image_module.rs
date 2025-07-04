@@ -83,8 +83,8 @@ pub(super) async fn image(
 
     //* Discord Webhook *//
     let sender = DiscordWebHookSender {
-        title: "物品の削除情報".to_string(),
-        description: "以下の物品が削除されました。".to_string(),
+        title: "物品の画像更新情報".to_string(),
+        description: "以下の物品の画像が更新されました。".to_string(),
         color: 0xfca130,
         item: item_model.clone(),
         connect_discord_webhook: connect_discord_item_webhook,

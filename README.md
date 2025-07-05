@@ -14,8 +14,6 @@ https://sohosai.github.io/dashi-server
 
 #### 1. `.env`の設置
 
-シークレットな情報のため、詳細はvaultwardenを参照
-
 #### 2. docker-compose up (dev)
 
 ```sh
@@ -23,8 +21,6 @@ docker-compose -f dev.compose.yaml up -d
 ```
 
 #### 3. `.env`の編集
-
-シークレットな情報のため、詳細はvaultwardenを参照
 
 #### 4. server の起動
 

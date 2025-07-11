@@ -42,14 +42,6 @@ pub enum RegisterItemError {
     VisibleIdConflictInGraphDBError,
     #[error("VisibleIdNotFoundInGraphDBError: VisibleId not found in GraphDB.")]
     VisibleIdNotFoundInGraphDBError,
-    #[error("ColorPatternExistInItemTableError: Color already exists in Item Table.")]
-    ColorPatternExistInItemTableError,
-    #[error("ColorPatternConflictInItemTableError: Conflict Color in Item Table.")]
-    ColorPatternConflictInItemTableError,
-    #[error("ColorPatternExistInMeiliSearchError: Color already exists in MeiliSearch.")]
-    ColorPatternExistInMeiliSearcheError,
-    #[error("ColorPatternConflictInMeiliSearchError: Conflict Color in Item MeiliSearch.")]
-    ColorPatternConflictInMeiliSearchError,
     #[error("RegisteredItemNotFoundError: Registered item not found.")]
     RegisteredItemNotFoundError,
     #[error(transparent)]
@@ -156,31 +148,6 @@ impl From<RegisterItemError> for AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,
                 code: "register-item/visible-id-not-found-in-graphdb".to_string(),
                 message: "VisibleIdNotFoundInGraphDBError: VisibleId not found in GraphDB.".to_string(),
-            },
-            RegisterItemError::ColorPatternExistInItemTableError => AppError {
-                status_code: StatusCode::INTERNAL_SERVER_ERROR,
-                code: "register-item/color-pattern-exist-in-item-table".to_string(),
-                message: "ColorPatternExistInItemTableError: Color already exists in Item Table."
-                    .to_string(),
-            },
-            RegisterItemError::ColorPatternConflictInItemTableError => AppError {
-                status_code: StatusCode::INTERNAL_SERVER_ERROR,
-                code: "register-item/color-pattern-conflict-in-item-table".to_string(),
-                message: "ColorPatternConflictInItemTableError: Conflict Color in Item Table."
-                    .to_string(),
-            },
-            RegisterItemError::ColorPatternExistInMeiliSearcheError => AppError {
-                status_code: StatusCode::INTERNAL_SERVER_ERROR,
-                code: "register-item/color-pattern-exist-in-meilisearch".to_string(),
-                message:
-                    "ColorPatternExistInMeiliSearchError: Color already exists in MeiliSaerch."
-                        .to_string(),
-            },
-            RegisterItemError::ColorPatternConflictInMeiliSearchError => AppError {
-                status_code: StatusCode::INTERNAL_SERVER_ERROR,
-                code: "register-item/color-pattern-conflict-in-meilisearch".to_string(),
-                message: "ColorPatternConflictInMeiliSearchError: Conflict Color in MeiliSearch."
-                    .to_string(),
             },
             RegisterItemError::RegisteredItemNotFoundError => AppError {
                 status_code: StatusCode::INTERNAL_SERVER_ERROR,

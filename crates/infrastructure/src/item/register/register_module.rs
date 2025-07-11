@@ -184,51 +184,6 @@ pub(super) async fn register(
         return Err(RegisterItemError::VisibleIdNotFoundInGraphDBError);
     }
 
-    //* validation of not conflict color *//
-    if register_item_data.color.chars().count() != 0 {
-        // validation of not conflict color in Item Table
-        match Item::find()
-            .filter(item::Column::Color.eq(register_item_data.color.to_owned()))
-            .all(&rdb)
-            .await
-        {
-            Ok(item_models) => {
-                if !item_models.is_empty() {
-                    if item_models.len() > 1 {
-                        // If multiple visible_ids already exist
-                        //* critical incident *//
-                        critical_incident::conflict_error().await;
-                        return Err(RegisterItemError::ColorPatternConflictInItemTableError);
-                    }
-                    return Err(RegisterItemError::ColorPatternExistInItemTableError);
-                }
-            }
-            Err(e) => return Err(RegisterItemError::RDBError(e)),
-        };
-        // validation of not conflict color in MeiliSearch
-        let filter_query = &format!(r#"color = "{}""#, register_item_data.color.to_owned());
-        let meilisearch_item: Vec<MeilisearchItemData> = meilisearch
-            .index("item")
-            .search()
-            .with_query(&register_item_data.color.to_owned())
-            .with_filter(filter_query)
-            .execute()
-            .await?
-            .hits
-            .into_iter()
-            .map(|item| item.result)
-            .collect();
-        if !meilisearch_item.is_empty() {
-            if meilisearch_item.len() > 1 {
-                // If multiple visible_ids already exist
-                //* critical incident *//
-                critical_incident::conflict_error().await;
-                return Err(RegisterItemError::ColorPatternConflictInMeiliSearchError);
-            }
-            return Err(RegisterItemError::ColorPatternExistInMeiliSearcheError);
-        }
-    }
-
     ////* operation *////
     //* insert to RDB *//
     let item_model = item::ActiveModel {
